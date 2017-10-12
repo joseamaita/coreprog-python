@@ -204,3 +204,85 @@ also contain modifiers that specify a width and precision. For example
 , `3d` formats an integer right-aligned in a column of width 3, 
 and `15.2f` formats a floating-point number in a column of width 15, so 
 that only two digits appear after the decimal point.
+
+### Conditionals
+
+The `if` and `else` statements can perform simple tests. Here's an 
+example:
+
+```python
+if a < b:
+    print("Computer says Yes")
+else:
+    print("Computer says No")
+```
+
+The bodies of the `if` and `else` clauses are denoted by indentation. 
+The `else` clause is optional.
+
+To create an empty clause, use the `pass` statement, as follows:
+
+```python
+if a < b:
+    pass    # Do nothing
+else:
+    print("Computer says No")
+```
+
+You can form Boolean expressions by using the `or`, `and`, and `not` 
+keywords:
+
+```python
+if product == "game" and type == "pirate memory" \
+                     and not (age < 4 or age > 8):
+    print("I'll take it!")
+```
+
+Please, notice that writing complex test cases commonly results in 
+statements that involve an annoyingly long line of code. To improve 
+readability, you can continue any statement to the next line by using a 
+backslash `\` at the end of a line as shown. If you do this, the normal 
+indentation rules don't apply to the next line, so you are free to 
+format the continued lines as you wish.
+
+Keep in mind that Python does not have a special **switch** or **case** 
+statement for testing values. To handle multiple-test cases, use 
+the `elif` statement, like this:
+
+```python
+if suffix == ".htm":
+    content = "text/html"
+elif suffix == ".jpg":
+    content = "image/jpeg"
+elif suffix == ".png":
+    content = "image/png"
+else:
+    raise RuntimeError("Unknown content type")
+```
+
+Also, other methods or workarounds are available to handle multiple-test 
+cases such as:
+
+* Switch/case with dictionary mapping.
+* Switch/case with dictionary mapping for functions.
+* Switch/case with dispatch methods for classes.
+
+To denote truth values, use the Boolean values `True` and `False`. 
+Here's an example:
+
+```python
+if 'spam' in s:
+    has_spam = True
+else:
+    has_spam = False
+```
+
+All relational operators such as `<` and `>` return `True` or `False` as 
+results. The `in` operator used in this example is commonly used to 
+check whether a value is contained inside of another object such as a 
+string, list, or dictionary. It also returns `True` or `False`, so the 
+preceding example could be shortened to this:
+
+```python
+has_spam = 'spam' in s
+```
