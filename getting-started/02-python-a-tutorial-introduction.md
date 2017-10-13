@@ -286,3 +286,211 @@ preceding example could be shortened to this:
 ```python
 has_spam = 'spam' in s
 ```
+
+### File Input and Output
+
+Suppose that you have a data file named `datafile` like this one:
+
+```
+  1 1050.000000
+  2 1102.500000
+  3 1157.625000
+  4 1215.506250
+  5 1276.281563
+  6 1340.095641
+  7 1407.100423
+  8 1477.455444
+  9 1551.328216
+ 10 1628.894627
+ 11 1710.339358
+ 12 1795.856326
+ 13 1885.649142
+ 14 1979.931599
+ 15 2078.928179
+ 16 2182.874588
+ 17 2292.018318
+ 18 2406.619234
+ 19 2526.950195
+ 20 2653.297705
+ 21 2785.962590
+ 22 2925.260720
+ 23 3071.523756
+ 24 3225.099944
+ 25 3386.354941
+```
+
+This program opens a data file and reads its contents line by line:
+
+```python
+#!/usr/bin/env python3
+
+def main():
+    print('-------------------------------------------')
+    print('          Read Data File')
+    print('-------------------------------------------')
+    print()
+    f = open("datafile")    # Returns a file object
+    line = f.readline()    # Invokes readline() method on file
+    while line:
+        print(line, end='')
+        line = f.readline()
+    f.close()    # Close the file object
+
+if __name__ == '__main__':
+    main()
+```
+
+The `open()` function returns a new file object. By invoking methods on 
+this object, you can perform various file operations. The `readline()` 
+method reads a single line of input, including the terminating newline. 
+The empty string is returned at the end of the file.
+
+In the example, the program is simply looping over all the lines in the 
+file `datafile`. Whenever a program loops over a collection of data like 
+this (for instance input lines, numbers, strings, etc.), it is commonly 
+known as *iteration*. Because iteration is such a common operation, 
+Python provides a dedicated statement, `for`, that is used to iterate 
+over items. For instance, the same program can be written much more 
+succinctly as follows:
+
+```python
+#!/usr/bin/env python3
+
+def main():
+    print('-------------------------------------------')
+    print('          Read Data File')
+    print('-------------------------------------------')
+    print()
+    f = open("datafile")
+    for line in f:
+        print(line, end='')
+    f.close()
+
+if __name__ == '__main__':
+    main()
+```
+
+To make the output of a program go to a file named `datafile-02`, you 
+can supply a file to the `print` statement, as shown in the following 
+example:
+
+```python
+#!/usr/bin/env python3
+
+def main():
+    print('-------------------------------------------')
+    print('          Write Data File')
+    print('-------------------------------------------')
+    print()
+    principal = 1000
+    rate = 0.05
+    numyears = 25
+    year = 1
+    f = open("datafile-02", "w")
+    while year <= numyears:
+        principal = principal * (1 + rate)
+        print(f"{year:3d} {principal:0.2f}", file=f)
+        year += 1
+    f.close()
+
+if __name__ == '__main__':
+    main()
+```
+
+After running the script, the output is:
+
+```
+  1 1050.00
+  2 1102.50
+  3 1157.62
+  4 1215.51
+  5 1276.28
+  6 1340.10
+  7 1407.10
+  8 1477.46
+  9 1551.33
+ 10 1628.89
+ 11 1710.34
+ 12 1795.86
+ 13 1885.65
+ 14 1979.93
+ 15 2078.93
+ 16 2182.87
+ 17 2292.02
+ 18 2406.62
+ 19 2526.95
+ 20 2653.30
+ 21 2785.96
+ 22 2925.26
+ 23 3071.52
+ 24 3225.10
+ 25 3386.35
+```
+
+In addition, file objects support a `write()` method that can be used to 
+write raw data. For example, the `print` statement in the previous 
+example could have been written this way:
+
+```python
+#!/usr/bin/env python3
+
+def main():
+    print('-------------------------------------------')
+    print('          Write Data File')
+    print('-------------------------------------------')
+    print()
+    principal = 1000
+    rate = 0.05
+    numyears = 25
+    year = 1
+    f = open("datafile-02", "w")
+    while year <= numyears:
+        principal = principal * (1 + rate)
+        f.write(f"{year:3d} {principal:0.2f}\n")
+        year += 1
+    f.close()
+
+if __name__ == '__main__':
+    main()
+```
+
+Although these examples have worked with files, the same techniques 
+apply to the standard output and input streams of the interpreter. For 
+example, if you wanted to read user input interactively, you can read 
+from the file `sys.stdin`. If you want to write data to the screen, you 
+can write to `sys.stdout`, which is the same file used to output data 
+produced by the `print` statement. For example:
+
+```python
+#!/usr/bin/env python3
+import sys
+
+def main():
+    print('---------------------------------------------------')
+    print('Read and Write from the Standard Input and Output')
+    print('---------------------------------------------------')
+    print()
+    sys.stdout.write("Enter your name: \n")
+    name = sys.stdin.readline().strip()
+    print(f"\nHello, {name}!\n")
+
+if __name__ == '__main__':
+    main()
+```
+
+This code can also be shortened to the following:
+
+```python
+#!/usr/bin/env python3
+
+def main():
+    print('---------------------------------------------------')
+    print('Read and Write from the Standard Input and Output')
+    print('---------------------------------------------------')
+    print()
+    name = input("Enter your name: \n")
+    print(f"\nHello, {name}!\n")
+
+if __name__ == '__main__':
+    main()
+```
