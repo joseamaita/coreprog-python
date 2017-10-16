@@ -494,3 +494,129 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
+### Strings
+
+Create strings like this:
+
+```python
+a = "Hello, World!"
+b = 'Life is beautiful'
+c = """The area of 'Data Structures and Algorithms in Python' is nice"""
+```
+
+The same type of quote used to start a string must be used to terminate 
+it. The use of triple-quoted strings allow us to capture all the text 
+that appears prior to the terminating triple quote, as opposed to single 
+and double quoted strings, which must be specified on one logical line. 
+Triple-quoted strings are useful when the contents of a string literal 
+span multiple lines of text such as the following:
+
+```python
+print("""<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, 
+        initial-scale=1.0">""")
+```
+
+Strings are immutable. The operators and functions that work with them 
+return new strings derived from the original. The operators ( `in`, `+`, 
+and `*` ) and built-in functions ( `len`, `max`, and `min` ) operate on 
+strings as they do on lists and tuples. Index and slice notation works 
+the same for obtaining elements or slices but can't be used to add, 
+remove, or replace elements.
+
+Strings are stored as sequences of characters indexed by integers, 
+starting at zero (0). To extract a single character, use the indexing 
+operator `s[i]` like this:
+
+```python
+>>> s = "Life is beatiful"
+>>> s[0]
+'L'
+>>> s[1]
+'i'
+>>> s[2]
+'f'
+>>> s[3]
+'e'
+```
+
+To extract a substring, use the slicing operator `s[i:j]`. This extracts 
+all characters from `s` whose index `k` is in the range `i <= k < j`. If 
+either index is omitted, the beginning or end of the string is assumed, 
+respectively:
+
+```python
+>>> s = "Life is beatiful"
+>>> s[:4]
+'Life'
+>>> s[5:]
+'is beatiful'
+>>> s[5:7]
+'is'
+```
+
+If you want to concatenate strings, use the plus ( `+` ) operator:
+
+```python
+>>> s = "Life is beatiful"
+>>> s + " and exciting"
+'Life is beatiful and exciting'
+```
+
+Python never implicitly interprets the contents of a string as numerical 
+data. For example, `+` always concatenates strings:
+
+```python
+>>> x = "49"
+>>> y = "26"
+>>> x + y
+'4926'
+```
+
+To perform mathematical calculations, strings first have to be converted 
+into a numeric value using a function such as `int()` or `float()`. For 
+example:
+
+```python
+>>> x = "49"
+>>> y = "26"
+>>> int(x) + int(y)
+75
+>>> float(x) + float(y)
+75.0
+```
+
+Non-string values can be converted into a string representation by using 
+the `str()`, `repr()` or `f-strings` functions. See how this works:
+
+```python
+>>> x = 49
+>>> "The value of x is " + str(x)
+'The value of x is 49'
+>>> "The value of x is " + repr(x)
+'The value of x is 49'
+>>> f"The value of x is {x}"
+'The value of x is 49'
+>>> f"The value of x is {x:5d}"
+'The value of x is    49'
+```
+
+Although `str()` and `repr()` both create strings, their output is 
+usually slightly different. `str()` produces the output that you get 
+when you use the `print` statement, whereas `repr()` creates a string 
+that you type into a program to exactly represent the value of an 
+object.
+
+The `f-string` function is used to convert a value to a string with a 
+specific formatting applied. For example:
+
+```python
+>>> x = 49
+>>> f"{x:0.6f}"
+'49.000000'
+```
