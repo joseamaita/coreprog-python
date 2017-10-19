@@ -620,3 +620,217 @@ specific formatting applied. For example:
 >>> f"{x:0.6f}"
 '49.000000'
 ```
+
+### Lists
+
+*Lists* are sequences of arbitrary objects. You create a list by 
+enclosing values in square brackets `[]` or using the `list` type 
+function:
+
+```python
+>>> names_a = ["Peter", "Dalia", "Johnny", "Rick"]
+>>> names_a
+['Peter', 'Dalia', 'Johnny', 'Rick']
+>>> names_b = list(("Peter", "Dalia", "Johnny", "Rick"))
+>>> names_b
+['Peter', 'Dalia', 'Johnny', 'Rick']
+```
+
+Lists are indexed by integers, starting with zero. Use the indexing 
+operator to access and modify individual items of the list:
+
+```python
+>>> n = names_a[2]
+>>> n
+'Johnny'
+>>> names_a[0] = "Jeffrey"
+>>> names_a
+['Jeffrey', 'Dalia', 'Johnny', 'Rick']
+```
+
+The `list` function is frequently used in data processing as a way to 
+materialize an iterator or generator expression:
+
+```python
+>>> gen = range(10)
+>>> gen
+range(0, 10)
+>>> list(gen)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+To append new items to the end of a list, use the `append()` method:
+
+```python
+>>> names_a.append("Tristan")
+>>> names_a
+['Jeffrey', 'Dalia', 'Johnny', 'Rick', 'Tristan']
+```
+
+To insert an item into a specific position of a list, use the `insert()` 
+method:
+
+```python
+>>> names_a.insert(1, "Sue")
+>>> names_a
+['Jeffrey', 'Sue', 'Dalia', 'Johnny', 'Rick', 'Tristan']
+```
+
+Notice this: the `insert` method is computationally expensive compared 
+with `append`, because references to subsequent elements have to be 
+shifted internally to make room for the new element. If you need to 
+insert elements at both the beginning and end of a sequence, you may 
+wish to explore `collections.deque`, a double-ended queue, for this 
+purpose.
+
+The inverse operation to `insert` is `pop`, which removes and returns an 
+element at a particular index:
+
+```python
+>>> names_b
+['Peter', 'Dalia', 'Johnny', 'Rick']
+>>> names_b.pop(1)
+'Dalia'
+>>> names_b
+['Peter', 'Johnny', 'Rick']
+```
+
+Elements can be removed by value with `remove`, which locates the first 
+such value and removes it from the last:
+
+```python
+>>> names_b.remove("Peter")
+>>> names_b
+['Johnny', 'Rick']
+```
+
+If performance is not a concern, by using `append` and `remove`, you can 
+use a Python list as a perfectly suitable "multiset" data structure.
+
+Check if a list contains a value using the `in` keyword:
+
+```python
+>>> "Rick" in names_a
+True
+```
+
+The keyword `not` can be used to negate `in`:
+
+```python
+>>> "Rick" not in names_a
+False
+```
+
+Checking whether a list contains a value is a lot slower than doing so 
+with dicts and sets, as Python makes a linear scan across the values of 
+the list, whereas it can check the others (based on hash tables) in 
+constant time.
+
+To add two lists together, use the plus ( `+` ) operator:
+
+```python
+>>> [4, None, 'foo'] + [7, 8, (2, 3)]
+[4, None, 'foo', 7, 8, (2, 3)]
+```
+
+If you have a list already defined, you can append multiple elements to 
+it using the `extend` method:
+
+```python
+>>> x = [4, None, 'foo']
+>>> x.extend([7, 8, (2, 3)])
+>>> x
+[4, None, 'foo', 7, 8, (2, 3)]
+```
+
+Note that list concatenation by addition is a comparatively expensive 
+operation since a new list must be created and the objects copied over. 
+Using `extend` to append elements to an existing list, especially if you 
+are building up a large list, is usually preferable.
+
+You can sort a list in-place (without creating a new object) by calling 
+its `sort` function:
+
+```python
+>>> a = [7, 2, 5, 1, 3]
+>>> a.sort()
+>>> a
+[1, 2, 3, 5, 7]
+```
+
+The `sort` function has a few options that will occasionally come in 
+handy. One is the ability to pass a secondary *sort* key, that is, a 
+function that produces a value to use to sort the objects. For example, 
+we could sort a collection of strings by their lengths:
+
+```python
+>>> b = ['saw', 'small', 'He', 'foxes', 'six']
+>>> b.sort(key=len)
+>>> b
+['He', 'saw', 'six', 'small', 'foxes']
+```
+
+You can extract or reassign a portion of a list by using the slicing 
+operator:
+
+```python
+>>> names_a[:2]
+['Jeffrey', 'Sue']
+>>> names_a[2:]
+['Dalia', 'Johnny', 'Rick', 'Tristan']
+>>> names_a[-3:]
+['Johnny', 'Rick', 'Tristan']
+>>> names_a[1] = "Homer"
+>>> names_a
+['Jeffrey', 'Homer', 'Dalia', 'Johnny', 'Rick', 'Tristan']
+>>> names_a[:2] = ["Keith", "Brandon", "Mark"]
+>>> names_a
+['Keith', 'Brandon', 'Mark', 'Dalia', 'Johnny', 'Rick', 'Tristan']
+```
+
+A step can also be used after a second colon to, say, take every other 
+element:
+
+```python
+>>> names_a[::2]
+['Keith', 'Mark', 'Johnny', 'Tristan']
+```
+
+A clever use of this is to pass `-1`, which has the useful effect of 
+reversing a list or tuple:
+
+```python
+>>> names_a[::-1]
+['Tristan', 'Rick', 'Johnny', 'Dalia', 'Mark', 'Brandon', 'Keith']
+```
+
+Create an empty list in these two ways:
+
+```python
+>>> names_c = []
+>>> names_c
+[]
+>>> names_d = list()
+>>> names_d
+[]
+```
+
+Lists can contain any kind of Python object, including other lists:
+
+```python
+>>> a = [22, "Louie", 9.81, ["C.K.", 6, 8, [200, 300]], 29]
+>>> a
+[22, 'Louie', 9.81, ['C.K.', 6, 8, [200, 300]], 29]
+```
+
+Items contained in nested lists are accessed by applying more than one 
+indexing operation:
+
+```python
+>>> a[2]
+9.81
+>>> a[3][0]
+'C.K.'
+>>> a[3][3][0]
+200
+```
