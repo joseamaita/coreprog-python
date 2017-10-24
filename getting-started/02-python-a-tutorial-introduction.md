@@ -834,3 +834,343 @@ indexing operation:
 >>> a[3][3][0]
 200
 ```
+
+### Tuples
+
+To create simple data structures, you can pack a collection of values 
+together into a single object using a *tuple*, a fixed-length, immutable 
+sequence. You create a tuple in different ways:
+
+* The easiest way is with a comma-separated sequence of values.
+* By enclosing a group of values in parentheses `()`.
+* By using the `tuple` type function.
+
+```python
+>>> names_a = "Peter", "Dalia", "Johnny", "Rick"
+>>> names_a
+('Peter', 'Dalia', 'Johnny', 'Rick')
+>>> stock = ('CNTV', 100, 126.84)
+>>> stock
+('CNTV', 100, 126.84)
+>>> address = tuple(['www.python.org', 80])
+>>> address
+('www.python.org', 80)
+```
+
+Notice that Python often recognizes that a tuple is intended even if the 
+parentheses are missing:
+
+```python
+>>> stock = 'CNTV', 100, 126.84
+>>> stock
+('CNTV', 100, 126.84)
+>>> address = 'www.python.org', 80
+>>> address
+('www.python.org', 80)
+>>> person = "Bob", "Jones", "555-7698"
+>>> person
+('Bob', 'Jones', '555-7698')
+```
+
+Tuples of 0 (empty) and 1-element have to be defined like this:
+
+```python
+>>> a = ()
+>>> a
+()
+>>> b
+(71,)
+>>> b = 71,
+>>> b
+(71,)
+```
+
+The values in a tuple can be extracted by numerical index just like a 
+list. However, it is more common to unpack tuples into a set of 
+variables:
+
+```python
+>>> stock = ('CNTV', 100, 126.84)
+>>> name, shares, price = stock
+>>> name
+'CNTV'
+>>> shares
+100
+>>> price
+126.84
+>>> address = ('www.python.org', 80)
+>>> host, port = address
+>>> host
+'www.python.org'
+>>> port
+80
+>>> person = "Bob", "Jones", "555-7698"
+>>> first_name, last_name, phone = person
+>>> first_name
+'Bob'
+>>> last_name
+'Jones'
+>>> phone
+'555-7698'
+```
+
+Using this functionality you can easily swap variable names, a task 
+which in many languages might look like:
+
+```
+tmp = a
+a = b
+b = tmp
+```
+
+But, in Python, the swap can be done like this:
+
+```python
+>>> a, b = ("foo", "bar")
+>>> a
+'foo'
+>>> b
+'bar'
+>>> b, a = a, b
+>>> a
+'bar'
+>>> b
+'foo'
+```
+
+A common use of variable unpacking is iterating over sequences of tuples 
+or lists:
+
+```python
+>>> seq = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
+>>> seq = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
+>>> for a, b, c in seq:
+...     print(f"a={a}, b={b}, c={c}")
+... 
+a=1, b=2, c=3
+a=4, b=5, c=6
+a=7, b=8, c=9
+```
+
+A more advanced tuple unpacking would help with situations where you may 
+want to "pluck" a few elements from the beginning of a tuple. This uses 
+the special syntax `*rest`, which is also used in function signatures to 
+capture an arbitrarily long list of positional arguments:
+
+```python
+>>> values = (1, 2, 3, 4, 5)
+>>> a, b, *rest = values
+>>> a
+1
+>>> b
+2
+>>> rest
+[3, 4, 5]
+```
+
+This `rest` bit is sometimes something you want to discard; there is 
+nothing special about the `rest` name. As a matter of convention, many 
+Python programmers will use the underscore ( `_` ) for unwanted 
+variables:
+
+```python
+>>> values = (1, 2, 3, 4, 5)
+>>> a, b, *_ = values
+>>> a
+1
+>>> b
+2
+>>> _
+[3, 4, 5]
+```
+
+Another common use is returning multiple values from a function. Let's 
+see:
+
+```python
+>>> a1 = 5
+>>> x1 = 14
+>>> def add_numbers(a, x):
+...     return a, x, a + x
+...
+>>> add_numbers(a1, x1)
+(5, 14, 19)
+```
+
+Although tuples support most of the same operations as lists (such as 
+indexing, slicing, and concatenation), the contents of a tuple cannot be 
+modified after creation (that is, you cannot replace, delete, or append 
+new elements to an existing tuple). This reflects the fact that a tuple 
+is best viewed as a single object consisting of several parts, not as a 
+collection of distinct objects to which you might insert or remove 
+items.
+
+Let's see this on the interpreter:
+
+```python
+>>> tup = tuple(['foo', [1, 2], True])
+>>> tup[2] = False
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'tuple' object does not support item assignment
+```
+
+If an object inside a tuple is mutable, such as a list, you can modify 
+it in-place:
+
+```python
+>>> tup[1].append(3)
+>>> tup
+('foo', [1, 2, 3], True)
+```
+
+You can concatenate tuples using the `+` operator to produce longer 
+tuples:
+
+```python
+>>> (4, None, 'foo') + (6, 0) + ('bar',)
+(4, None, 'foo', 6, 0, 'bar')
+```
+
+Multiplying a tuple by an integer, as with lists, has the effect of 
+concatenating together that many copies of the tuple:
+
+```python
+>>> ('foo', 'bar') * 4
+('foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'bar')
+```
+
+Note that the objects themselves are not copied, only the references to 
+them.
+
+Because there is so much overlap between tuples and lists, some 
+programmers are inclined to ignore tuples altogether and simply use 
+lists because they seem to be more flexible. Although this works, it 
+wastes memory if your program is going to create a large number of small 
+lists (that is, each containing fewer than a dozen items). This is 
+because lists slightly overallocate memory to optimize the performance 
+of operations that add new items. Because tuples are immutable, they use 
+a more compact representation where there is no extra space.
+
+Tuples and lists are often used together to represent data. For example, 
+this program shows how you might read a file consisting of different 
+columns of data separated by commas. The datafile 
+named `datafile-03.csv` has this structure:
+
+```
+CNTV,100,126.84
+PLTR,250,321.78
+PDVS,400,1007.87
+SIDR,125,32.46
+ALSA,110,15.45
+```
+
+The script is:
+
+```python
+#!/usr/bin/env python3
+# File containing lines of the form "name,shares,price"
+filename = "datafile-03.csv"
+portfolio = []
+
+def print_portfolio(portfolio):
+    print(f"portfolio[0]: {portfolio[0]}")
+    print(f"portfolio[1]: {portfolio[1]}")
+    print(f"portfolio[2][1]: {portfolio[2][1]}")
+    print(f"portfolio[3][2]: {portfolio[3][2]}")
+    print(f"portfolio[4]: {portfolio[4]}")
+
+def main():
+    print('------------------------------------------------------')
+    print(' Read a File with Columns of Data Separated by Commas ')
+    print('------------------------------------------------------')
+    print()
+    with open(filename) as f:
+        for line in f:
+            fields = line.split(",")    # Split each line into a list
+            name = fields[0]    # Extract and convert individual fields
+            shares = int(fields[1])
+            price = float(fields[2])
+            stock = (name, shares, price)    # Create a tuple 
+                                             # (name, shares, price)
+            portfolio.append(stock)    # Append to list of records
+        print_portfolio(portfolio)
+
+if __name__ == '__main__':
+    main()
+```
+
+The `split()` method of strings splits a string into a list of fields 
+separated by the given delimiter character. The resulting `portfolio` 
+data structure created by this program looks like a two-dimension array 
+of rows and columns. Each row is represented by a tuple and individual 
+items of data can be accessed too.
+
+After running the script, the output is:
+
+```
+------------------------------------------------------
+ Read a File with Columns of Data Separated by Commas 
+------------------------------------------------------
+
+portfolio[0]: ('CNTV', 100, 126.84)
+portfolio[1]: ('PLTR', 250, 321.78)
+portfolio[2][1]: 400
+portfolio[3][2]: 32.46
+portfolio[4]: ('ALSA', 110, 15.45)
+```
+
+Here's an easy way to loop over all of the records and expand fields 
+into a set of variables:
+
+```python
+#!/usr/bin/env python3
+# File containing lines of the form "name,shares,price"
+filename = "datafile-03.csv"
+portfolio = []
+
+def print_portfolio(portfolio):
+    print(f"portfolio[0]: {portfolio[0]}")
+    print(f"portfolio[1]: {portfolio[1]}")
+    print(f"portfolio[2][1]: {portfolio[2][1]}")
+    print(f"portfolio[3][2]: {portfolio[3][2]}")
+    print(f"portfolio[4]: {portfolio[4]}")
+
+def main():
+    print('------------------------------------------------------')
+    print(' Read a File with Columns of Data Separated by Commas ')
+    print('------------------------------------------------------')
+    print()
+    with open(filename) as f:
+        for line in f:
+            fields = line.split(",")    # Split each line into a list
+            name = fields[0]    # Extract and convert individual fields
+            shares = int(fields[1])
+            price = float(fields[2])
+            stock = (name, shares, price)    # Create a tuple 
+                                             # (name, shares, price)
+            portfolio.append(stock)    # Append to list of records
+        print_portfolio(portfolio)
+        total = 0.0
+        for name, shares, price in portfolio:
+            total += shares * price
+        print(f"The total amount of money that you have is {total} $")
+
+if __name__ == '__main__':
+    main()
+```
+
+After running the script, the output is:
+
+```
+------------------------------------------------------
+ Read a File with Columns of Data Separated by Commas 
+------------------------------------------------------
+
+portfolio[0]: ('CNTV', 100, 126.84)
+portfolio[1]: ('PLTR', 250, 321.78)
+portfolio[2][1]: 400
+portfolio[3][2]: 32.46
+portfolio[4]: ('ALSA', 110, 15.45)
+The total amount of money that you have is 502034.0 $
+```
