@@ -1043,6 +1043,18 @@ concatenating together that many copies of the tuple:
 Note that the objects themselves are not copied, only the references to 
 them.
 
+Since the size and contents of a tuple cannot be modified, it is very 
+light on instance methods. A particularly useful one (also available on 
+lists) is `count`, which counts the number of occurrences of a value:
+
+```python
+>>> a = (1, 2, 2, 2, 3, 4, 2)
+>>> a.count(4)
+1
+>>> a.count(2)
+4
+```
+
 Because there is so much overlap between tuples and lists, some 
 programmers are inclined to ignore tuples altogether and simply use 
 lists because they seem to be more flexible. Although this works, it 
