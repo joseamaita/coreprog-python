@@ -2,3 +2,4 @@
 
 * Simple compound-interest calculation
 * "Guess That Number" game
+* Basic switcher
