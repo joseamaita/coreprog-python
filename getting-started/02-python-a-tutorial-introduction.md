@@ -1186,3 +1186,119 @@ portfolio[3][2]: 32.46
 portfolio[4]: ('ALSA', 110, 15.45)
 The total amount of money that you have is 502034.0 $
 ```
+
+### Built-In Sequence Functions
+
+Python has a handful of useful sequence functions that you should 
+familiarize yourself with and use at any opportunity.
+
+**enumerate**
+
+It's common when iterating over a sequence to want to keep track of the 
+index of the current item. A do-it-yourself approach would look like:
+
+```python
+i = 0
+for value in collection:
+    # do something with value
+    i += 1
+```
+
+Since this is so common, Python has a built-in function, `enumerate`, 
+which returns a sequence of `(i, value)` tuples:
+
+```python
+for i, value in enumerate(collection):
+    # do something with value
+```
+
+When you are indexing data, a helpful pattern that uses `enumerate` is 
+computing a `dict` mapping the values of a sequence (which are assumed 
+to be unique) to their locations in the sequence:
+
+```python
+>>> a_list = ['foo', 'bar', 'baz']
+>>> mapping = {}
+>>> for i, value in enumerate(a_list):
+...     mapping[value] = i
+... 
+>>> mapping
+{'foo': 0, 'bar': 1, 'baz': 2}
+```
+
+**sorted**
+
+The `sorted` function returns a new sorted list from the elements of any 
+sequence:
+
+```python
+>>> sorted([7, 1, 2, 6, 0, 3, 2])
+[0, 1, 2, 2, 3, 6, 7]
+>>> sorted('horse race')
+[' ', 'a', 'c', 'e', 'e', 'h', 'o', 'r', 'r', 's']
+```
+
+The `sorted` function accepts the same arguments as the `sort` method on 
+lists.
+
+**zip**
+
+The `zip` function "pairs" up the elements of a number of lists, tuples, 
+or other sequences to create a list of tuples:
+
+```python
+>>> seq_1 = ['foo', 'bar', 'baz']
+>>> seq_2 = ['one', 'two', 'three']
+>>> zipped = zip(seq_1, seq_2)
+>>> list(zipped)
+[('foo', 'one'), ('bar', 'two'), ('baz', 'three')]
+```
+
+The `zip` function can take an arbitrary number of sequences, and the 
+number of elements it produces is determined by the *shortest* sequence:
+
+```python
+>>> seq_3 = [False, True]
+>>> list(zip(seq_1, seq_2, seq_3))
+[('foo', 'one', False), ('bar', 'two', True)]
+```
+
+A very common use of `zip` is simultaneously iterating over multiple 
+sequences, possibly also combined with `enumerate`:
+
+```python
+>>> for i, (a, b) in enumerate(zip(seq_1, seq_2)):
+...     print(f"{i}: {a}, {b}")
+... 
+0: foo, one
+1: bar, two
+2: baz, three
+```
+
+Given a "zipped" sequence, `zip` can be applied in a clever way to 
+"unzip" the sequence. Another way to think about this is converting a 
+list of *rows* into a list of *columns*. The syntax, which looks a bit 
+magical, is:
+
+```python
+>>> users = [('David', 'Jones'), ('Mike', 'Parker'), ('Trent', 'Bay')]
+>>> first_names, last_names = zip(*users)
+>>> first_names
+('David', 'Mike', 'Trent')
+>>> last_names
+('Jones', 'Parker', 'Bay')
+```
+
+**reversed**
+
+The `reversed` function iterates over the elements of a sequence in 
+reverse order:
+
+```python
+>>> list(reversed(range(10)))
+[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+```
+
+Keep in mind that `reversed` is a generator, so it does not create the 
+reversed sequence until materialized (e.g., with `list` or a `for` 
+loop).
