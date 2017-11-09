@@ -1302,3 +1302,143 @@ reverse order:
 Keep in mind that `reversed` is a generator, so it does not create the 
 reversed sequence until materialized (e.g., with `list` or a `for` 
 loop).
+
+### Sets
+
+A *set* is used to contain an unordered collection of unique objects. To 
+create a set, use the `set()` function and supply a sequence of items or 
+via a *set literal* with curly braces `{}`:
+
+```python
+>>> set_1 = set([3, 5, 9, 10])
+>>> set_1
+{9, 10, 3, 5}
+>>> set_2 = set([2, 2, 2, 1, 3, 3])
+>>> set_2
+{1, 2, 3}
+>>> set_3 = set("Hello")
+>>> set_3
+{'H', 'l', 'e', 'o'}
+>>> set_4 = {2, 2, 2, 1, 3, 3}
+>>> set_4
+{1, 2, 3}
+```
+
+Unlike lists and tuples, sets are unordered and cannot be indexed by 
+numbers. Moreover, the elements of a set are never duplicated. Notice 
+above that only one `'l'` appears.
+
+Sets support mathematical *set operations*, including union, 
+intersection, difference, and symmetric difference. Consider these two 
+example sets:
+
+```python
+>>> a = {1, 2, 3, 4, 5}
+>>> b = {3, 4, 5, 6, 7, 8}
+```
+
+The union of these two sets is the set of distinct elements occurring in 
+either set. This can be computed with either the `union` method or 
+the `|` binary operator:
+
+```python
+>>> a.union(b)
+{1, 2, 3, 4, 5, 6, 7, 8}
+>>> a | b
+{1, 2, 3, 4, 5, 6, 7, 8}
+```
+
+The intersection contains the elements occurring in both sets. The `&` 
+operator or the `intersection` method can be used:
+
+```python
+>>> a.intersection(b)
+{3, 4, 5}
+>>> a & b
+{3, 4, 5}
+```
+
+The difference contains the elements in one set, but not the other. 
+The `-` operator or the `difference` method can be used:
+
+```python
+>>> a.difference(b)
+{1, 2}
+>>> a - b
+{1, 2}
+```
+
+The symmetric difference contains the elements in either set but not 
+both. The `^` operator or the `symmetric_difference` method can be used:
+
+```python
+>>> a.symmetric_difference(b)
+{1, 2, 6, 7, 8}
+>>> a ^ b
+{1, 2, 6, 7, 8}
+```
+
+New items can be added to a set using `add()` or `update()` methods:
+
+```python
+>>> a.add(9)
+>>> a
+{1, 2, 3, 4, 5, 9}
+>>> b.update([10, 37, 42])
+>>> b
+{3, 4, 5, 6, 7, 8, 37, 10, 42}
+```
+
+An item can be removed using `remove()`:
+
+```python
+>>> b.remove(42)
+>>> b
+{3, 4, 5, 6, 7, 8, 37, 10}
+```
+
+All of the logical set operations have in-place counterparts, which 
+enable you to replace the contents of the set on the left side of the 
+operation with the result. For very large sets, this may be more 
+efficient:
+
+```python
+>>> c = a.copy()
+>>> c
+{1, 2, 3, 4, 5, 9}
+>>> c |= b
+>>> c
+{1, 2, 3, 4, 5, 6, 7, 8, 9, 37, 10}
+>>> d = a.copy()
+>>> d &= b
+>>> d
+{3, 4, 5}
+```
+
+Set elements generally must be immutable. To have list-like elements, 
+you must convert it to a tuple:
+
+```python
+>>> data = [6, 7, 8, 9]
+>>> set_1 = {tuple(data)}
+>>> set_1
+{(6, 7, 8, 9)}
+```
+
+You can also check if a set is a subset of (is contained in) or a 
+superset of (contains all elements of) another set:
+
+```python
+>>> set_2 = {1, 2, 3, 4, 5}
+>>> {1, 2, 3}.issubset(set_2)
+True
+>>> set_2.issuperset({1, 2, 3})
+True
+```
+
+Sets are equal if and only if their contents are equal:
+
+```python
+>>> {1, 2, 3} == {3, 2, 1}
+True
+```
