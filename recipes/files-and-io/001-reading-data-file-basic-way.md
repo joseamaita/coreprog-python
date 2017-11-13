@@ -61,3 +61,25 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
+**Version B**
+
+This program opens a data file, reads and prints its contents line by 
+line, but using the `for` statement:
+
+```python
+#!/usr/bin/env python3
+
+def main():
+    print('-------------------------------------------')
+    print('          Read Data File')
+    print('-------------------------------------------')
+    print()
+    f = open("datafile")
+    for line in f:
+        print(line, end='')
+    f.close()
+
+if __name__ == '__main__':
+    main()
+```
