@@ -83,3 +83,23 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
+**Version C**
+
+This program opens a data file, reads and prints its contents line by 
+line, but using the `with` keyword:
+
+```python
+#!/usr/bin/env python3
+
+def main():
+    print('-------------------------------------------')
+    print('          Read Data File')
+    print('-------------------------------------------')
+    print()
+    with open("datafile") as f:
+        print(f.read(), end='')
+
+if __name__ == '__main__':
+    main()
+```
