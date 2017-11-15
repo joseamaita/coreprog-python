@@ -6,3 +6,4 @@ binary files, file encodings, and other related matters. Techniques for
 manipulating filenames and directories are also covered.
 
 * Reading a data file in a basic way
+* Writing a data file in a basic way
