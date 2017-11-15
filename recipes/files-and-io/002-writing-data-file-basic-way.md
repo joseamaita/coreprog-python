@@ -36,7 +36,7 @@ if __name__ == '__main__':
     main()
 ```
 
-After running the script, if you open `datafile-02"`, the output is:
+After running the script, if you open `datafile-02`, the output is:
 
 ```
   1 1050.00
