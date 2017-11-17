@@ -65,3 +65,32 @@ After running the script, if you open `datafile-02`, the output is:
  24 3225.10
  25 3386.35
 ```
+
+**Version B**
+
+This program makes the output of a program go to a file. Here, you use 
+the `write()` method from the file object, which can be used to write 
+raw data.
+
+```python
+#!/usr/bin/env python3
+
+def main():
+    print('-------------------------------------------')
+    print('          Write Data File')
+    print('-------------------------------------------')
+    print()
+    principal = 1000
+    rate = 0.05
+    numyears = 25
+    year = 1
+    f = open("datafile-02", "w")
+    while year <= numyears:
+        principal = principal * (1 + rate)
+        f.write(f"{year:3d} {principal:0.2f}\n")
+        year += 1
+    f.close()
+
+if __name__ == '__main__':
+    main()
+```
