@@ -1442,3 +1442,267 @@ Sets are equal if and only if their contents are equal:
 >>> {1, 2, 3} == {3, 2, 1}
 True
 ```
+
+### Dictionaries
+
+The `dict` object is likely the most important built-in Python data 
+structure. Common names for it are *hash map*, *hash table* 
+or *associative array*. A *dictionary* contains objects indexed by keys. 
+Another definition could be that they contain a flexibly sized 
+collection of *key-value* pairs, where *key* and *value* are Python 
+objects.
+
+To create a dictionary, use the `dict({})` function or use curly 
+braces `{}` and colons `:` to separate keys and values, like this:
+
+```python
+>>> stock = {"name": "CNTV", "shares": 100, "price": 126.84}
+>>> stock
+{'name': 'CNTV', 'shares': 100, 'price': 126.84}
+>>> dict_1 = dict({"a": "some value", "b": [1, 2, 3, 4]})
+>>> dict_1
+{'a': 'some value', 'b': [1, 2, 3, 4]}
+```
+
+An empty dictionary is created in one of two ways:
+
+```python
+>>> prices_1 = {}
+>>> prices_1
+{}
+>>> prices_2 = dict()
+>>> prices_2
+{}
+```
+
+To access members of a dictionary, use the key-indexing operator:
+
+```python
+>>> stock['name']
+'CNTV'
+>>> stock['shares']
+100
+>>> stock['price']
+126.84
+>>> value = stock['shares'] * stock['price']
+>>> value
+12684.0
+```
+
+Modify or insert objects by doing this:
+
+```python
+>>> stock['shares'] = 125
+>>> value = stock['shares'] * stock['price']
+>>> stock['value'] = value
+>>> stock['date'] = "February 4, 2014"
+>>> stock
+{'name': 'CNTV', 'shares': 125, 'price': 126.84, 'value': 15855.0, 'date': 'February 4, 2014'}
+```
+
+Although strings are the most common type of key, you can use many other 
+Python objects, including numbers and tuples. Some objects, including 
+lists and dictionaries, cannot be used as keys because their contents 
+can change.
+
+A dictionary is a useful way to define an object that consists of named 
+fields as shown previously. However, dictionaries are also used as a 
+container for performing fast lookups on unordered data. Let's see a 
+dictionary of stock prices:
+
+```python
+>>> prices = {"CNTV": 126.84, "PLTR": 321.78, "PDVS": 1007.87, "SIDR": 32.46, "ALSA": 15.45}
+>>> prices
+{'CNTV': 126.84, 'PLTR': 321.78, 'PDVS': 1007.87, 'SIDR': 32.46, 'ALSA': 15.45}
+```
+
+Dictionary membership is tested with the `in` operator:
+
+```python
+if "VELM" in prices:
+    p = prices["VELM"]
+else:
+    p = 0.0
+```
+
+This particular sequence of steps can also be performed more compactly 
+like this:
+
+```python
+>>> p = prices.get("VELM", 0.0)
+>>> p
+0.0
+>>> p = prices.get("PLTR", 0.0)
+>>> p
+321.78
+```
+
+You can delete values either using the `del` statement or the `pop` 
+method (which simultaneously returns the value and deletes the key):
+
+```python
+>>> prices['FMO'] = 334.78
+>>> prices
+{'CNTV': 126.84, 'PLTR': 321.78, 'PDVS': 1007.87, 'SIDR': 32.46, 'ALSA': 15.45, 'FMO': 334.78}
+>>> del prices['ALSA']
+>>> prices
+{'CNTV': 126.84, 'PLTR': 321.78, 'PDVS': 1007.87, 'SIDR': 32.46, 'FMO': 334.78}
+>>> prices.pop('SIDR')
+32.46
+>>> prices
+{'CNTV': 126.84, 'PLTR': 321.78, 'PDVS': 1007.87, 'FMO': 334.78}
+```
+
+To obtain a list of dictionary keys, convert a dictionary to a list:
+
+```python
+>>> syms = list(prices)
+>>> syms
+['CNTV', 'PLTR', 'PDVS', 'FMO']
+```
+
+The `keys` and `values` method give you iterators of the dictionary's 
+keys and values, respectively. While the key-value pairs are not in any 
+particular order, these functions output the keys and values in the same 
+order:
+
+```python
+>>> list(prices.keys())
+['CNTV', 'PLTR', 'PDVS', 'FMO']
+>>> list(prices.values())
+[126.84, 321.78, 1007.87, 334.78]
+```
+
+You can merge one dictionary into another using the `update` method:
+
+```python
+>>> prices.update({"BAUX": 44.98, "VENO": 227.51})
+>>> prices
+{'CNTV': 126.84, 'PLTR': 321.78, 'PDVS': 1007.87, 'FMO': 334.78, 'BAUX': 44.98, 'VENO': 227.51}
+```
+
+The `update` method changes dictionaries in-place, so any existing keys 
+in the data passed to `update` will have their old values discarded.
+
+**Creating dictionaries from sequences**
+
+It's common to occasionally end up with two sequences that you want to 
+pair up element-wise in a dictionary. As a first cut, you might write 
+code like this:
+
+```python
+mapping = {}
+for key, value in zip(key_list, value_list):
+    mapping[key] = value
+```
+
+Since a dictionary is essentially a collection of 2-tuples, the `dict` 
+function accepts a list of 2-tuples:
+
+```python
+>>> mapping = dict(zip(range(5), reversed(range(5))))
+>>> mapping
+{0: 4, 1: 3, 2: 2, 3: 1, 4: 0}
+```
+
+**Default values**
+
+It's very common to have logic like:
+
+```python
+if key in some_dict:
+    value = some_dict[key]
+else:
+    value = default_value
+```
+
+Thus, the dictionary methods `get` and `pop` can take a default value to 
+be returned, so that the above `if-else` block can be written simply as:
+
+```python
+value = some_dict.get(key, default_value)
+```
+
+The `get` method by default will return `None` if the key is not 
+present, while the `pop` method will raise an exception. With *setting* 
+values, a common case is for the values in a dictionary to be other 
+collections, like lists. For example, you could imagine categorizing a 
+list of words by their first letters as a dictionary of lists:
+
+```python
+>>> words = ['apple', 'bat', 'bar', 'atom', 'book']
+>>> by_letter = {}
+>>> for word in words:
+...     letter = word[0]
+...     if letter not in by_letter:
+...         by_letter[letter] = [word]
+...     else:
+...         by_letter[letter].append(word)
+>>> by_letter
+{'a': ['apple', 'atom'], 'b': ['bat', 'bar', 'book']}
+```
+
+The `setdefault` dictionary method is for precisely this purpose. The 
+preceding `for` loop can be rewritten as:
+
+```python
+>>> for word in words:
+...     letter = word[0]
+...     by_letter.setdefault(letter, []).append(word)
+... 
+>>> by_letter
+{'a': ['apple', 'atom'], 'b': ['bat', 'bar', 'book']}
+```
+
+The built-in `collections` module has a useful class, `defaultdict`, 
+which makes this even easier. To create one, you pass a type or function 
+for generating the default value for each slot in the dictionary:
+
+```python
+>>> from collections import defaultdict
+>>> by_letter = defaultdict(list)
+>>> for word in words:
+...     by_letter[word[0]].append(word)
+... 
+>>> by_letter
+defaultdict(<class 'list'>, {'a': ['apple', 'atom'], 'b': ['bat', 'bar', 'book']})
+>>> by_letter['a']
+['apple', 'atom']
+>>> by_letter['b']
+['bat', 'bar', 'book']
+```
+
+**Valid dictionary key types**
+
+While the values of a dictionary can be any Python object, the keys 
+generally have to be immutable objects like scalar types (int, float, 
+string) or tuples (all the objects in the tuple need to be immutable, 
+too). The technical term here is *hashability*. You can check whether an 
+object is hashable (can be used as a key in a dictionary) with 
+the `hash` function:
+
+```python
+>>> hash('string')
+-889191027928915186
+>>> hash((1, 2, (2, 3)))
+1097636502276347782
+>>> hash((1, 2, [2, 3]))
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unhashable type: 'list'
+```
+
+To use a list as a key, one option is to convert it to a tuple, which 
+can be hashed as long as its elements also can:
+
+```python
+>>> d = {}
+>>> d[tuple([1, 2, 3])] = 5
+>>> d
+{(1, 2, 3): 5}
+```
+
+Dictionaries are probably the most finely tuned data type in the Python 
+interpreter. So, if you are merely trying to store and work with data in 
+your program, you are almost always better off using a dictionary than 
+trying to come up with some kind of custom data structure on your own.
