@@ -1706,3 +1706,159 @@ Dictionaries are probably the most finely tuned data type in the Python
 interpreter. So, if you are merely trying to store and work with data in 
 your program, you are almost always better off using a dictionary than 
 trying to come up with some kind of custom data structure on your own.
+
+### List, Set, and Dictionary Comprehensions
+
+*List comprehensions* are one of the most-loved Python language 
+features. They allow you to concisely form a new list by filtering the 
+elements of a collection, transforming the elements passing the filter 
+in one concise expression. They take the basic form:
+
+```python
+[expr for val in collection if condition]
+```
+
+This is equivalent to the following `for` loop:
+
+```python
+result = []
+for val in collection:
+    if condition:
+        result.append(expr)
+```
+
+The filter condition can be omitted, leaving only the expression. For 
+example, given a list of strings, we could filter out strings with 
+length 2 or less and also convert them to uppercase like this:
+
+```python
+>>> strings = ['a', 'as', 'bat', 'car', 'dove', 'python']
+>>> [x.upper() for x in strings if len(x) > 2]
+['BAT', 'CAR', 'DOVE', 'PYTHON']
+```
+
+Set and dictionary comprehensions are a natural extension, producing 
+sets and dictionaries in an idiomatically similar way instead of lists. 
+A dictionary comprehension looks like this:
+
+```python
+{key-expr: value-expr for val in collection if condition}
+```
+
+Let's see an example:
+
+```python
+>>> {x.upper(): list(range(3)) for x in ['a', 'b', 'c'] if type(x) is str}
+{'A': [0, 1, 2], 'B': [0, 1, 2], 'C': [0, 1, 2]}
+```
+
+In a similar way, a set comprehension looks like this:
+
+```python
+{expr for val in collection if condition}
+```
+
+Let's see an example:
+
+```python
+>>> {x.upper() for x in ['d', 'e', 'f', 1, 2, 3] if type(x) is str}  
+{'E', 'D', 'F'}
+```
+
+Like list comprehensions, set and dictionary comprehensions are mostly 
+conveniences, but they similarly can make code both easier to write and 
+read. Consider the list of 
+strings `['a', 'as', 'bat', 'car', 'dove', 'python']` and suppose we 
+wanted a set containing just the lengths of the strings contained in the 
+collection. We could easily compute this using a set comprehension:
+
+```python
+>>> strings = ['a', 'as', 'bat', 'car', 'dove', 'python']
+>>> {len(x) for x in strings}
+{1, 2, 3, 4, 6}
+```
+
+We could also express this more functionally using the `map` function:
+
+```python
+>>> set(map(len, strings))
+{1, 2, 3, 4, 6}
+```
+
+As a simple dictionary comprehension example, we could create a lookup 
+map of these strings to their locations in the list:
+
+```python
+>>> {val: index for index, val in enumerate(strings)}
+{'a': 0, 'as': 1, 'bat': 2, 'car': 3, 'dove': 4, 'python': 5}
+```
+
+**Nested list comprehensions**
+
+Suppose we have a list of lists containing some English and Spanish 
+names:
+
+```python
+>>> data = [['John', 'Emily', 'Michael', 'Mary', 'Peter'], 
+...         ['Maria', 'Juan', 'Miguel', 'Emilia', 'Pablo']]
+```
+
+You might have gotten these names from a couple of files and decided to 
+organize them by language. Now, suppose we wanted to get a single list 
+containing all names with two or more `e`'s in them. We could certainly 
+do this with a simple `for` loop:
+
+```python
+>>> for names in data:
+...     enough_es = [name for name in names if name.count('e') >= 2]
+...     names_of_interest.extend(enough_es)
+... 
+>>> names_of_interest
+['Peter']
+```
+
+You can actually wrap this whole operation up in a 
+single *nested list comprehension*, which will look like:
+
+```python
+>>> names_of_interest = [name for names in data for name in names if name.count('e') >= 2]
+>>> names_of_interest
+['Peter']
+```
+
+At first, nested list comprehensions are a bit hard to wrap your head 
+around. The `for` parts of the list comprehension are arranged according 
+to the order of nesting, and any filter condition is put at the end as 
+before. Here is another example where we "flatten" a list of tuples of 
+integers into a simple list of integers:
+
+```python
+>>> tuple_a = [(1, 2, 3), (4, 5, 6), (7, 8, 9)]
+>>> [x for tup in tuple_a for x in tup]
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+Keep in mind that the order of the `for` expressions would be the same 
+if you wrote a nested `for` loop instead of a list comprehension:
+
+```python
+flattened = []
+for tup in tuple_a:
+    for x in tup:
+        flattened.append(x)
+```
+
+You can have arbitrarily many levels of nesting, though if you have more 
+than two or three levels of nesting you should probably start to 
+question whether this makes sense from a code readability standpoint. 
+It's important to distinguish the syntax just shown from a list 
+comprehension inside a list comprehension, which is also perfectly 
+valid:
+
+```python
+>>> [[x for x in tup] for tup in tuple_a]
+[[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+```
+
+This produces a list of lists, rather than a flattened list of all of 
+the inner elements.
