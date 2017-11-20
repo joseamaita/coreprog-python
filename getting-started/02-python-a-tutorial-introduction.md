@@ -1707,6 +1707,153 @@ interpreter. So, if you are merely trying to store and work with data in
 your program, you are almost always better off using a dictionary than 
 trying to come up with some kind of custom data structure on your own.
 
+### Iteration and Looping
+
+The most widely used looping construct is the `for` statement, which is 
+used to iterate over a collection of items. Iteration is one of Python's 
+richest features. However, the most common form of iteration is to 
+simply loop over all the members of a sequence such as a string, list, 
+or tuple. Let's see:
+
+```python
+>>> for n in [1, 2, 3, 4, 5, 6, 7, 8, 9]:
+...     print(f"2 to the {n} power is {2**n}")
+...
+2 to the 1 power is 2
+2 to the 2 power is 4
+2 to the 3 power is 8
+2 to the 4 power is 16
+2 to the 5 power is 32
+2 to the 6 power is 64
+2 to the 7 power is 128
+2 to the 8 power is 256
+2 to the 9 power is 512
+```
+
+In this example, the variable `n` will be assigned successive items from 
+the list `[1, 2, 3, 4, ..., 9]` on each iteration. Because looping over 
+ranges of integers is quite common, the following shortcut is often used 
+for that purpose:
+
+```python
+>> for n in range(1, 10):
+...     print(f"2 to the {n} power is {2**n}")
+...
+2 to the 1 power is 2
+2 to the 2 power is 4
+2 to the 3 power is 8
+2 to the 4 power is 16
+2 to the 5 power is 32
+2 to the 6 power is 64
+2 to the 7 power is 128
+2 to the 8 power is 256
+2 to the 9 power is 512
+```
+
+The `range(i,j [,stride])` function creates an object that represents a 
+range of integers with values *i* to *j-1*. If the starting value is 
+omitted, it's taken to be zero. An optional stride can also be given as 
+a third argument. Let's see:
+
+```python
+>>> a = range(5)
+>>> a
+range(0, 5)
+>>> list(a)
+[0, 1, 2, 3, 4]
+>>> b = range(1, 8)
+>>> b
+range(1, 8)
+>>> list(b)
+[1, 2, 3, 4, 5, 6, 7]
+>>> c = range(0, 14, 3)
+>>> c
+range(0, 14, 3)
+>>> list(c)
+[0, 3, 6, 9, 12]
+>>> d = range(8, 1, -1)
+>>> d
+range(8, 1, -1)
+>>> list(d)
+[8, 7, 6, 5, 4, 3, 2]
+```
+
+You can advance a `for` loop to the next iteration, skipping the 
+remainder of the block, using the `continue` keyword. Consider the below 
+code, which sums up integers in a list and skips `None` values:
+
+```python
+>>> seq = [1, 2, None, 4, None, 5]
+>>> total = 0
+>>> for value in seq:
+...     if value is None:
+...         continue
+...     total += value
+...
+>>> total
+12
+```
+
+A `for` loop can be exited altogether with the `break` keyword. This 
+code sums elements of the list until a 5 is reached:
+
+```python
+>>> seq = [1, 2, 0, 4, 6, 5, 2, 1]
+>>> total_until_5 = 0
+>>> for value in seq:
+...     if value == 5:
+...         break
+...     total_until_5 += value
+...
+>>> total_until_5
+13
+```
+
+The `break` keyword only terminates the innermost `for` loop. Any 
+outer `for` loops will continue to run:
+
+```python
+>>> for i in range(4):
+...     for j in range(4):
+...         if j > i:
+...             break
+...         print((i, j))
+...
+(0, 0)
+(1, 0)
+(1, 1)
+(2, 0)
+(2, 1)
+(2, 2)
+(3, 0)
+(3, 1)
+(3, 2)
+(3, 3)
+```
+
+The `for` loop is one of Python's most powerful language features 
+because you can create custom iterator objects and generator functions 
+that supply it with sequences of values.
+
+A different looping statement is the `while` loop. It specifies a 
+condition and a block of code that is to be executed until the condition 
+evaluates to `False` or the loop is explicitly ended with `break`:
+
+```python
+>>> x = 256
+>>> total = 0
+>>> while x > 0:
+...     if total > 500:
+...         break
+...     total += x
+...     x = x // 2
+...
+>>> x
+4
+>>> total
+504
+```
+
 ### List, Set, and Dictionary Comprehensions
 
 *List comprehensions* are one of the most-loved Python language 
@@ -1805,14 +1952,14 @@ names:
 
 You might have gotten these names from a couple of files and decided to 
 organize them by language. Now, suppose we wanted to get a single list 
-containing all names with two or more `e`'s in them. We could certainly 
+containing all names with two or more `e`s in them. We could certainly 
 do this with a simple `for` loop:
 
 ```python
 >>> for names in data:
 ...     enough_es = [name for name in names if name.count('e') >= 2]
 ...     names_of_interest.extend(enough_es)
-... 
+...
 >>> names_of_interest
 ['Peter']
 ```
