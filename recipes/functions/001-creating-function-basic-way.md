@@ -43,3 +43,49 @@ After running the script, the output is:
 
 The remainder for 37/15 is 7
 ```
+
+**Version B**
+
+You can use a tuple to return multiple values from a function. Now, 
+let's focus on the `divide` function definition:
+
+```python
+#!/usr/bin/env python3
+
+def remainder(a, b):
+    q = a // b
+    r = a - q * b
+    return r
+
+def divide(a, b):
+    q = a // b
+    r = a - q * b
+    return q, r
+
+def main():
+    print('-------------------------------------------')
+    print('      Create and Use Functions')
+    print('-------------------------------------------')
+    print()
+    a = 1456
+    b = 33
+    quotient, remainder = divide(a, b)
+    print(f"If you divide {a}/{b}...")
+    print(f"The remainder 'r' would be {remainder}")
+    print(f"The quotient 'q' would be {quotient}")
+
+if __name__ == '__main__':
+    main()
+```
+
+After running the script, the output is:
+
+```
+-------------------------------------------
+      Create and Use Functions
+-------------------------------------------
+
+If you divide 1456/33...
+The remainder 'r' would be 4
+The quotient 'q' would be 44
+```
