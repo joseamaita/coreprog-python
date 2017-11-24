@@ -89,3 +89,50 @@ If you divide 1456/33...
 The remainder 'r' would be 4
 The quotient 'q' would be 44
 ```
+
+**Version C**
+
+Now, a different approach is shown, where a variable named `div` would 
+be a 2-tuple with the two returned variables. Let's focus on 
+the `divide` function definition:
+
+```python
+#!/usr/bin/env python3
+
+def remainder(a, b):
+    q = a // b
+    r = a - q * b
+    return r
+
+def divide(a, b):
+    q = a // b
+    r = a - q * b
+    return q, r
+
+def main():
+    print('-------------------------------------------')
+    print('      Create and Use Functions')
+    print('-------------------------------------------')
+    print()
+    a = 1456
+    b = 33
+    div = divide(a, b)
+    print(f"If you divide {a}/{b}...")
+    print(f"The remainder 'r' would be {div[1]}")
+    print(f"The quotient 'q' would be {div[0]}")
+
+if __name__ == '__main__':
+    main()
+```
+
+After running the script, the output is:
+
+```
+-------------------------------------------
+      Create and Use Functions
+-------------------------------------------
+
+If you divide 1456/33...
+The remainder 'r' would be 4
+The quotient 'q' would be 44
+```
