@@ -136,3 +136,49 @@ If you divide 1456/33...
 The remainder 'r' would be 4
 The quotient 'q' would be 44
 ```
+
+**Version D**
+
+A potentially attractive alternative to returning multiple values like 
+the previous two versions might be to return a `dict` instead:
+
+```python
+#!/usr/bin/env python3
+
+def remainder(a, b):
+    q = a // b
+    r = a - q * b
+    return r
+
+def divide(a, b):
+    q = a // b
+    r = a - q * b
+    return {'q': q, 'r': r}
+
+def main():
+    print('-------------------------------------------')
+    print('      Create and Use Functions')
+    print('-------------------------------------------')
+    print()
+    a = 1456
+    b = 33
+    div = divide(a, b)
+    print(f"If you divide {a}/{b}...")
+    print(f"The remainder 'r' would be {div['r']}")
+    print(f"The quotient 'q' would be {div['q']}")
+
+if __name__ == '__main__':
+    main()
+```
+
+After running the script, the output is:
+
+```
+-------------------------------------------
+      Create and Use Functions
+-------------------------------------------
+
+If you divide 1456/33...
+The remainder 'r' would be 4
+The quotient 'q' would be 44
+```
