@@ -2009,3 +2009,374 @@ valid:
 
 This produces a list of lists, rather than a flattened list of all of 
 the inner elements.
+
+### Functions
+
+Functions are the primary and most important method of code organization 
+and reuse in Python. As a rule of thumb, if you anticipate needing to 
+repeat the same or very similar code more than once, it may be worth 
+writing a reusable function. Functions can also help make your code more 
+readable by giving a name to a group of Python statements.
+
+Functions are declared with the `def` keyword and returned from with 
+the `return` keyword. Let's see a first example:
+
+```python
+>>> def remainder(a, b):
+...     q = a // b
+...     r = a - q * b
+...     return r
+...
+```
+
+A second example would be:
+
+```python
+>>> def my_function(x, y, z=1.5):
+...     if z > 1:
+...         return z * (x + y)
+...     else:
+...         return z / (x + y)
+...
+```
+
+To invoke a function, simply use the name of the function followed by 
+its arguments enclosed in parentheses:
+
+```python
+>>> result_1 = remainder(37, 15)
+>>> result_1
+7
+>>> result_2 = my_function(12, 25)
+>>> result_2
+55.5
+```
+
+There is no issue with having multiple `return` statements. If Python 
+reaches the end of a function without encountering a `return` statement
+, `None` is returned automatically.
+
+Each function can have *positional* arguments and *keyword* arguments. 
+Keyword arguments are most commonly used to specify default values or 
+optional arguments. In the first preceding function, `a` and `b` are 
+positional arguments. In the second preceding function, `x` and `y` are 
+positional arguments, while `z` is a keyword argument. This means that 
+those functions can be called in any of these ways:
+
+```python
+>>> result_11 = remainder(26, 8)
+>>> result_11
+2
+>>> result_12 = remainder(b=8, a=26)
+>>> result_12
+2
+>>> result_21 = my_function(5, 6, z=0.7)
+>>> result_21
+0.06363636363636363
+>>> result_22 = my_function(3.141592, 7, 3.5)
+>>> result_22
+35.495571999999996
+>>> result_23 = my_function(10, 20)
+>>> result_23
+45.0
+```
+
+The main restriction on function arguments is that the keyword 
+arguments *must* follow the positional arguments (if any). You can 
+specify keyword arguments in any order; this frees you from having to 
+remember which order the function arguments were specified in and only 
+what their names are.
+
+It is possible to use keywords for passing positional arguments as well. 
+In the second preceding example, we could also have written:
+
+```python
+my_function(x=5, y=6, z=7)
+my_function(y=6, x=5, z=7)
+```
+
+In some cases this can help with readability.
+
+**Namespaces, Scope, and Local Functions**
+
+Functions can access variables in two different scopes: *global* 
+and *local*. An alternative and more descriptive name describing a 
+variable scope in Python is a *namespace*. Any variables that are 
+assigned within a function by default are assigned to the local 
+namespace. That is, the variable is only defined inside the body of the 
+function and is destroyed when the function returns. The local namespace 
+is created when the function is called and immediately populated by the 
+function's arguments. After the function is finished, the local 
+namespace is destroyed (with some exceptions). Consider the following 
+function:
+
+```python
+>>> def func():
+...     a = []
+...     for i in range(5):
+...         a.append(i)
+...
+```
+
+When `func()` is called, the empty list `a` is created, five elements 
+are appended, and then `a` is destroyed when the function exits. Suppose 
+instead we had declared `a` as follows:
+
+```python
+>>> a = []
+>>> def func():
+...     for i in range(5):
+...         a.append(i)
+...
+```
+
+Assigning variables outside of the function's scope is possible, but 
+those variables must be declared as global via the `global` keyword:
+
+```python
+>>> a = 1
+>>> a
+1
+>>> def bind_a_variable():
+...     global a
+...     a = []
+...
+>>> bind_a_variable()
+>>> a
+[]
+```
+
+Notice this: it is generally discouraged to use the `global` keyword. 
+Typically global variables are used to store some kind of state in a 
+system. If you find yourself using a lot of them, it may indicate a need 
+for object-oriented programming (using classes).
+
+**Returning Multiple Values**
+
+You can use a tuple to return multiple values from a function:
+
+```python
+>>> def divide(a, b):
+...     q = a // b
+...     r = a - q * b
+...     return q, r
+...
+```
+
+When returning multiple values in a tuple, you can easily unpack the 
+result into separate variables like this:
+
+```python
+>>> quotient, remainder = divide(1456, 33)
+>>> quotient
+44
+>>> remainder
+4
+```
+
+A different approach is this:
+
+```python
+>>> return_value = divide(1456, 33)
+>>> return_value
+(44, 4)
+```
+
+Here, `return_value` would be a 2-tuple with the two returned variables. 
+A potentially attractive alternative to returning multiple values like 
+before might be to return a `dict` instead:
+
+```python
+>>> def divide(a, b):
+...     q = a // b
+...     r = a - q * b
+...     return {'q': q, 'r': r}
+...
+```
+
+Then:
+
+```python
+>>> return_value = divide(1456, 33)
+>>> return_value
+{'q': 44, 'r': 4}
+```
+
+**Functions Are Objects**
+
+Since Python functions are objects, many constructs can be easily 
+expressed that are difficult to do in other languages. Suppose we were 
+doing some data cleaning and needed to apply a bunch of transformations 
+to the following list of strings:
+
+```python
+>>> states = ['Alabama ', 'Georgia!', 'Georgia', 'georgia', 'FlOrIda', 
+...           'south   carolina##', 'West virginia?']
+```
+
+Anyone who has ever worked with user-submitted survey data has seen 
+messy results like these. Lots of things need to happen to make this 
+list of strings uniform and ready for analysis: stripping whitespace, 
+removing punctuation symbols, and standardizing on proper 
+capitalization. One way to do this is to use built-in string methods 
+along with the `re` standard library module for regular expressions:
+
+```python
+>>> import re
+>>> def clean_strings(strings):
+...     result = []
+...     for value in strings:
+...         value = value.strip()
+...         value = re.sub('[!#?]', '', value)
+...         value = value.title()
+...         result.append(value)
+...     return result
+...
+```
+
+The result looks like this:
+
+```python
+>>> clean_strings(states)
+['Alabama', 'Georgia', 'Georgia', 'Georgia', 'Florida', 'South   
+Carolina', 'West Virginia']
+```
+
+An alternative approach that you may find useful is to make a list of 
+the operations you want to apply to a particular set of strings:
+
+```python
+>>> def remove_punctuation(value):
+...     return re.sub('[!#?]', '', value)
+...
+>>> clean_ops = [str.strip, remove_punctuation, str.title]
+>>> def clean_strings(strings, ops):
+...     result = []
+...     for value in strings:
+...         for function in ops:
+...             value = function(value)
+...         result.append(value)
+...     return result
+...
+```
+
+Then we have the following:
+
+```python
+>>> clean_strings(states, clean_ops)
+['Alabama', 'Georgia', 'Georgia', 'Georgia', 'Florida', 'South   
+Carolina', 'West Virginia']
+```
+
+A more *functional* pattern like this enables you to easily modify how 
+the strings are transformed at a very high level. The `clean_strings` 
+function is also now more reusable and generic.
+
+You can use functions as arguments to other functions like the 
+built-in `map` function, which applies a function to a sequence of some 
+kind:
+
+```python
+>>> for x in map(remove_punctuation, states):
+...     print(x)
+...
+Alabama
+Georgia
+Georgia
+georgia
+FlOrIda
+south   carolina
+West virginia
+```
+
+**Anonymous (Lambda) Functions**
+
+Python has support for so-called *anonymous* or *lambda* functions, 
+which are a way of writing functions consisting of a single statement, 
+the result of which is the return value. They are defined with 
+the `lambda` keyword, which has no meaning other than "we are declaring 
+an anonymous function":
+
+```python
+>>> def short_function(x):
+...     return x * 2
+...
+>>> short_function(10)
+20
+>>> equiv_anon = lambda x: x * 2
+>>> equiv_anon(10)
+20
+```
+
+These functions are especially convenient in data analysis because there 
+are many cases where data transformation functions will take functions 
+as arguments. It's often less typing (and clearer) to pass a lambda 
+function as opposed to writing a full-out function declaration or even 
+assigning the lambda function to a local variable. For example, consider 
+this silly example:
+
+```python
+>>> def apply_to_list(some_list, f):
+...     return [f(x) for x in some_list]
+...
+>>> ints = [4, 0, 1, 5, 6]
+>>> apply_to_list(ints, lambda x: x * 2)
+[8, 0, 2, 10, 12]
+```
+
+You could also have written `[x * 2 for x in ints]`, but here we were 
+able to succinctly pass a custom operator to the `apply_to_list` 
+function.
+
+As another example, suppose you wanted to sort a collection of strings 
+by the number of distinct letters in each string:
+
+```python
+>>> strings = ['foo', 'card', 'bar', 'aaaa', 'abab']
+```
+
+Here we could pass a lambda function to the list's `sort` method:
+
+```python
+>>> strings.sort(key=lambda x: len(set(list(x))))
+>>> strings
+['aaaa', 'foo', 'abab', 'bar', 'card']
+```
+
+Notice this: one reason lambda functions are called anonymous functions 
+is that, unlike functions declared with the `def` keyword, the function 
+object itself is never given an explicit `__name__` attribute.
+
+**Currying: Partial Argument Application**
+
+*Currying* is computer science jargon (named after the mathematician 
+Haskell Curry) that means deriving new functions from existing ones 
+by *partial argument application*. For example, suppose we had a trivial 
+function that adds two numbers together:
+
+```python
+>>> def add_numbers(x, y):
+...     return x + y
+...
+```
+
+Using this function, we could derive a new function of one variable
+, `add_five`, that adds 5 to its argument:
+
+```python
+>>> add_five = lambda y: add_numbers(5, y)
+>>> add_five(10)
+15
+```
+
+The second argument to `add_numbers` is said to be *curried*. There's 
+nothing very fancy here, as all we've really done is define a new 
+function that calls an existing function. The built-in `functools` 
+module can simplify this process using the `partial` function:
+
+```python
+>>> from functools import partial
+>>> add_five = partial(add_numbers, 5)
+>>> add_five(10)
+15
+```
