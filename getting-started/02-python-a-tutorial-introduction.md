@@ -2380,3 +2380,266 @@ module can simplify this process using the `partial` function:
 >>> add_five(10)
 15
 ```
+
+### Iterators and Generators
+
+Having a consistent way to iterate over sequences, like objects in a 
+list or lines in a file, is an important Python feature. This is 
+accomplished by means of the *iterator protocol*, a generic way to make 
+objects iterable. For example, iterating over a dictionary yields the 
+dictionary keys:
+
+```python
+>>> dict_a = {'a': 1, 'b': 2, 'c': 3}
+>>> for key in dict_a:
+...     print(key)
+...
+a
+b
+c
+```
+
+When you write `for key in dict_a`, the Python interpreter first 
+attempts to create an iterator out of `dict_a`:
+
+```python
+>>> dict_iterator = iter(dict_a)
+>>> dict_iterator
+<dict_keyiterator object at 0x7f4ae3617e08>
+```
+
+An iterator is any object that will yield objects to the Python 
+interpreter when used in a context like a `for` loop. Most methods 
+expecting a list or list-like object will also accept any iterable 
+object. This includes built-in methods such as `min`, `max`, and `sum`, 
+and type constructors like `list` and `tuple`:
+
+```python
+>>> list(dict_a)
+['a', 'b', 'c']
+```
+
+A *generator* is a concise way to construct a new iterable object. 
+Whereas normal functions execute and return a single result at a time, 
+generators return an entire sequence of multiple results lazily, pausing 
+after each one until the next one is requested. To create a generator, 
+use the `yield` keyword instead of `return` in a function. Let's see a 
+first example of a generator definition:
+
+```python
+>>> def countdown(n):
+...     print("Counting down!")
+...     while n > 0:
+...         yield n
+...         n -= 1
+...
+```
+
+A second example would be:
+
+```python
+>>> def squares(n=10):
+...     print(f"Generating squares from 1 to {n ** 2}")
+...     for i in range(1, n + 1):
+...         yield i ** 2
+...
+```
+
+When you actually call the generator, no code is immediately executed:
+
+```python
+>>> countdown(8)
+<generator object countdown at 0x7f7f1d187678>
+>>> squares()
+<generator object squares at 0x7f7f1d1876d0>
+```
+
+It is not until you request elements from the generator that it begins 
+executing its code. One way to do these requests is to use successive 
+calls to a `__next__()` method. Let's see:
+
+```python
+>>> cd = countdown(8)
+>>> cd.__next__()
+Counting down!
+8
+>>> cd.__next__()
+7
+>>> cd.__next__()
+6
+>>> cd.__next__()
+5
+>>> cd.__next__()
+4
+>>> sq = squares()
+>>> sq.__next__()
+Generating squares from 1 to 100
+1
+>>> sq.__next__()
+4
+>>> sq.__next__()
+9
+>>> sq.__next__()
+16
+>>> sq.__next__()
+25
+```
+
+The `__next()__` call makes a generator function run until it reaches 
+the next `yield` statement. At this point, the value passed to `yield` 
+is returned by `__next__()`, and the function suspends execution. The 
+function resumes execution on the statement following `yield` 
+when `__next__()` is called again. This process continues until the 
+function returns.
+
+Normally, you would not manually call `__next__()` as shown. Instead, 
+you would use a `for` loop like this:
+
+```python
+>>> for i in countdown(8):
+...     print(i, end=' ')
+...
+Counting down!
+8 7 6 5 4 3 2 1
+>>> for x in squares():
+...     print(x, end=' ')
+...
+Generating squares from 1 to 100
+1 4 9 16 25 36 49 64 81 100
+```
+
+**Generator expresssions**
+
+Another even more concise way to make a generator is by using 
+a *generator expression*. This is a generator analogue to list, 
+dictionary, and set comprehensions. To create one, enclose what would 
+otherwise be a list comprehension within parentheses instead of 
+brackets:
+
+```python
+>>> gen1 = (x for x in range(8, 0, -1))
+>>> gen1
+<generator object <genexpr> at 0x7f7f1d187720>
+>>> gen2 = (x ** 2 for x in range(100))
+>>> gen2
+<generator object <genexpr> at 0x7f7f1d187728>
+```
+
+The first generator `gen1` is completely equivalent to the following 
+more verbose generator:
+
+```python
+>>> def _make_gen1():
+...     for x in range(8, 0, -1):
+...         yield x
+...
+>>> gen1 = _make_gen1()
+>>> gen1
+<generator object _make_gen1 at 0x7f7f1d1875c8>
+```
+
+The second generator `gen2` is completely equivalent to the following 
+more verbose generator:
+
+```python
+>>> def _make_gen2():
+...     for x in range(100):
+...         yield x ** 2
+...
+>>> gen2 = _make_gen2()
+>>> gen2
+<generator object _make_gen at 0x7f7f1d187780>
+```
+
+Generator expressions can be used instead of list comprehensions as 
+function arguments in many cases:
+
+```python
+>>> sum(x for x in range(8, 0, -1))
+36
+>>> sum(x ** 2 for x in range(100))
+328350
+>>> dict((x, x ** 2) for x in range(8, 0, -1))
+{8: 64, 7: 49, 6: 36, 5: 25, 4: 16, 3: 9, 2: 4, 1: 1}
+>>> dict((i, i ** 2) for i in range(5))
+{0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+```
+
+**itertools module**
+
+The standard library `itertools` module has a collection of generators 
+for many common data algorithms. For example, `groupby` takes any 
+sequence and a function, grouping consecutive elements in the sequence 
+by return value of the function. Here's an example:
+
+```python
+>>> import itertools
+>>> first_letter = lambda x: x[0]
+>>> names = ['Alan', 'Adam', 'Wes', 'Will', 'Albert', 'Steven']
+>>> for letter, names in itertools.groupby(names, first_letter):
+...     print(letter, list(names))
+...
+A ['Alan', 'Adam']
+W ['Wes', 'Will']
+A ['Albert']
+S ['Steven']
+```
+
+Now, let's see a few other helpful `itertools` functions:
+
+```python
+>>> for x in itertools.combinations(range(4), 3):
+...     print(x)
+...
+(0, 1, 2)
+(0, 1, 3)
+(0, 2, 3)
+(1, 2, 3)
+>>> for x in itertools.permutations(range(4), 3):
+...     print(x)
+...
+(0, 1, 2)
+(0, 1, 3)
+(0, 2, 1)
+(0, 2, 3)
+(0, 3, 1)
+(0, 3, 2)
+(1, 0, 2)
+(1, 0, 3)
+(1, 2, 0)
+(1, 2, 3)
+(1, 3, 0)
+(1, 3, 2)
+(2, 0, 1)
+(2, 0, 3)
+(2, 1, 0)
+(2, 1, 3)
+(2, 3, 0)
+(2, 3, 1)
+(3, 0, 1)
+(3, 0, 2)
+(3, 1, 0)
+(3, 1, 2)
+(3, 2, 0)
+(3, 2, 1)
+>>> for x in itertools.product('ab', range(3)):
+...     print(x)
+...
+('a', 0)
+('a', 1)
+('a', 2)
+('b', 0)
+('b', 1)
+('b', 2)
+>>> for x in itertools.product((0, 1), (0, 1), (0, 1)):
+...     print(x)
+...
+(0, 0, 0)
+(0, 0, 1)
+(0, 1, 0)
+(0, 1, 1)
+(1, 0, 0)
+(1, 0, 1)
+(1, 1, 0)
+(1, 1, 1)
+```
