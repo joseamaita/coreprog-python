@@ -8,3 +8,4 @@ the `itertools` module, making generator functions, and so forth. This
 section aims to address common problems involving iteration.
 
 * Creating an iterator in a basic way
+* Knowing origin of an iterator
