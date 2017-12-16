@@ -7,3 +7,4 @@ manipulating filenames and directories are also covered.
 
 * Reading a data file in a basic way
 * Writing a data file in a basic way
+* Reading and writing text data
