@@ -9,3 +9,4 @@ manipulating filenames and directories are also covered.
 * Writing a data file in a basic way
 * Reading and writing text data
 * Printing to a file
+* Reading and writing from the standard input and output
