@@ -11,3 +11,4 @@ section aims to address common problems involving iteration.
 * Knowing origin of an iterator
 * Defining an iterator with a class
 * Consuming an iterator manually
+* Delegating iteration
