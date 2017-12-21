@@ -45,3 +45,37 @@ José Alberto
 
 Hello, José Alberto!
 ```
+
+**Version B**
+
+You can replace instructions `sys.stdout.write()` 
+and `sys.stdin.readline().strip()` with the built-in function `input()`. 
+Let's see another application sample:
+
+```python
+#!/usr/bin/env python3
+
+def main():
+    print('---------------------------------------------------')
+    print('Read and Write from the Standard Input and Output')
+    print('---------------------------------------------------')
+    print()
+    name = input("Enter your name: \n")
+    print(f"\nHello, {name}!\n")
+
+if __name__ == '__main__':
+    main()
+```
+
+A sample run would show you something like this:
+
+```
+---------------------------------------------------
+Read and Write from the Standard Input and Output
+---------------------------------------------------
+
+Enter your name: 
+José Alberto
+
+Hello, José Alberto!
+```
