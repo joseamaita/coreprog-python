@@ -12,3 +12,4 @@ section aims to address common problems involving iteration.
 * Defining an iterator with a class
 * Consuming an iterator manually
 * Delegating iteration
+* Creating a generator in a basic way
