@@ -11,7 +11,7 @@ You need a basic way of creating a generator.
 **Version A**
 
 Instead of returning a single value, you want a basic function that can 
-generate an entire sequence of results. To acomplish that, use the 
+generate an entire sequence of results. To accomplish that, use the 
 generation construct, which is the `yield` statement. Let's see a simple 
 generator function definition:
 
