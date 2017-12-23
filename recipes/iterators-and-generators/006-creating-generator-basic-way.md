@@ -12,9 +12,8 @@ You need a basic way of creating a generator.
 
 Instead of returning a single value, you want a basic function that can 
 generate an entire sequence of results. To acomplish that, use the 
-generation construct, which is the `yield` statement. This allows us to 
-generate an entire sequence of results. Let's see a simple generator 
-function definition:
+generation construct, which is the `yield` statement. Let's see a simple 
+generator function definition:
 
 ```python
 >>> def countdown(n):
@@ -25,12 +24,29 @@ function definition:
 ...
 ```
 
-Any function that uses `yield` is known as a *generator*. Calling a 
-generator function creates an object that produces a sequence of results 
-through successive calls to a `__next__()` method. Let's see:
+A generator function does not return any values. When we call it, we get 
+a `generator object`:
 
 ```python
 >>> cu = countdown(3)
+>>> cu
+<generator object countdown at 0x7f99a34eb678>
+```
+
+Our generator object is indeed an iterator, as we can see, it implements 
+the `__iter__` and the `__next__` methods:
+
+```python
+>>> print(hasattr(cu, '__iter__'))
+True
+>>> print(hasattr(cu, '__next__'))
+True
+```
+
+Calling a generator function creates an object that produces a sequence 
+of results through successive calls to a `__next__()` method. Let's see:
+
+```python
 >>> cu.__next__()
 Counting down!
 3
