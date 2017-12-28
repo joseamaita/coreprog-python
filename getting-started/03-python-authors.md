@@ -24,6 +24,25 @@ that you'll want to read and learn.
 | [Python Cookbook (O'Reilly Media)](http://www.dabeaz.com/cookbook.html) | Good cookbook (recipes for mastering Python 3) |
 | [Python Programming Language (Safari)](https://www.safaribooksonline.com/library/view/python-programming-language/9780134217314/) | Video training series |
 
+### G
+
+**Grinberg, Miguel**
+
+| Web Link | Description |
+| -------- | ----------- |
+| [miguelgrinberg.com](https://blog.miguelgrinberg.com/) | Personal website for books, tutorials, projects, courses, ideas and more |
+| [Miguel Grinberg's Tutorials](https://learn.miguelgrinberg.com/) | Paid site for tutorials by Miguel Grinberg |
+| [Twitter](https://twitter.com/miguelgrinberg) | Twitter account |
+| [GitHub](https://github.com/miguelgrinberg) | GitHub account |
+| [Facebook](https://www.facebook.com/miguelgrinbergblog) | Facebook account |
+| [Google+](https://plus.google.com/u/0/+MiguelGrinberg) | Google+ account |
+| [LinkedIn](https://www.linkedin.com/in/miguelgrinberg) | LinkedIn account |
+| [Email](mailto:webmaster@miguelgrinberg.com) | Email address |
+| [RSS Feed](https://blog.miguelgrinberg.com/feed) | RSS feed |
+| [The New and Improved The Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world) | New and improved version of the famous "The Flask Mega-Tutorial" |
+| [FlaskBook.com](https://flaskbook.com) | Companion site for the Flask book and training videos by Miguel Grinberg |
+| [Safari Books](https://www.safaribooksonline.com/search/?query=Miguel%20Grinberg) | Safari books and videos made by Miguel Grinberg |
+
 ### P
 
 **python.org**
