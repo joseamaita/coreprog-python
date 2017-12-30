@@ -2643,3 +2643,48 @@ Now, let's see a few other helpful `itertools` functions:
 (1, 1, 0)
 (1, 1, 1)
 ```
+
+### Coroutines
+
+Normally, functions operate on a single set of input arguments. However, 
+a function can also be written to operate as a task that processes a 
+sequence of inputs sent to it. This type of function is known as 
+a *coroutine* and is created by using the `yield` as an 
+expression `(yield)` like this:
+
+```python
+>>> def print_matches(matchtext):
+...     print(f"Looking for {matchtext}")
+...     while True:
+...         line = (yield)    # Get a line of text
+...         if matchtext in line:
+...             print(line)
+...
+```
+
+To use this function, you first call it, advance it to the 
+first `(yield)`, and then start sending data to it using `send()`. Let's 
+see:
+
+```python
+>>> matcher = print_matches("python")
+>>> matcher.__next__()    # Advance to the first (yield)
+Looking for python
+>>> matcher.send("Hello, World!")
+>>> matcher.send("python is cool")
+python is cool
+>>> matcher.send("shhh!")
+>>> matcher.close()    # Done with the matcher function call
+```
+
+A coroutine is suspended until a value is sent to it using `send()`. 
+When this happens, that value is returned by the `(yield)` expression 
+inside the coroutine and is processed by the statements that follow. 
+Processing continues until the next `(yield)` expression is encountered, 
+at which point the function suspends. This continues until the coroutine 
+function returns or `close()` is called on it as shown above.
+
+Coroutines are useful when writing concurrent programs based on 
+producer-consumer problems where one part of a program is producing data 
+to be consumed by another part of the program. In this model, a 
+coroutine represents a consumer of data.
