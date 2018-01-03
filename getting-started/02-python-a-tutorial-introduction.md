@@ -2688,3 +2688,146 @@ Coroutines are useful when writing concurrent programs based on
 producer-consumer problems where one part of a program is producing data 
 to be consumed by another part of the program. In this model, a 
 coroutine represents a consumer of data.
+
+### Objects and Classes
+
+All values used in a program are objects. An *object* consists of 
+internal data and methods that perform various kinds of operations 
+involving that data. You have already used objects and methods when 
+working with the built-in types such as strings and lists. Let's see:
+
+```python
+>>> items = [65, 90]    # Create a list object
+>>> items.append(41)    # Call the append() method
+>>> items
+[65, 90, 41]
+```
+
+The `dir()` function lists the methods available on an object and is a 
+useful tool for interactive experimentation:
+
+```python
+>>> dir(items)
+['__add__', '__class__', '__contains__', '__delattr__', '__delitem__', 
+'__dir__', '__doc__', '__eq__', '__format__', '__ge__', 
+'__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', 
+'__imul__', '__init__', '__init_subclass__', '__iter__', '__le__', 
+'__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', 
+'__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', 
+'__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 
+'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 
+'reverse', 'sort']
+```
+
+When inspecting objects, you will see familiar methods such 
+as `append()` and `insert()` listed. However, you will also see special 
+methods that always begin and end with a double underscore. These 
+methods implement various language operations. For example, 
+the `__add__()` method implements the `+` operator:
+
+```python
+>>> items.__add__([23, 34])
+[65, 90, 41, 23, 34]
+```
+
+The `class` statement is used to define new types of objects and for 
+object-oriented programming. For example, the following class defines a 
+simple stack with `push()`, `pop()`, and `length()` operations:
+
+```python
+>>> class Stack(object):
+...     def __init__(self):    # Initialize the stack
+...         self.stack = []
+...     def push(self, object):
+...         self.stack.append(object)
+...     def pop(self):
+...         return self.stack.pop()
+...     def length(self):
+...         return len(self.stack)
+...
+```
+
+In the first line of the class definition, the 
+statement `class Stack(object)` declares `Stack` to be an `object`. The 
+use of parentheses is how Python specifies inheritance. In this case
+, `Stack` inherits from `object`, which is the root of all Python types. 
+Inside the class definition, methods are defined using the `def` 
+statement. The first argument in each method always refers to the object 
+itself. By convention, `self` is the name used for this argument. All 
+operations involving the attributes of an object must explicitly refer 
+to the `self` variable. Methods with leading and trailing double 
+underscores are special methods. For example, `__init__` is used to 
+initialize an object after it's created.
+
+Use a class like this:
+
+```python
+>>> s = Stack()    # Create a stack
+>>> s
+<__main__.Stack object at 0x7f4620858be0>
+>>> s.push("Ricky")    # Push some things onto it
+>>> s.push(83)
+>>> s.push([3, 5, 7, 9])
+>>> x = s.pop()
+>>> x
+[3, 5, 7, 9]
+>>> y = s.pop()
+>>> y
+83
+>>> del s    # Destroy s
+>>> s
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 's' is not defined
+```
+
+In the previous example, an entirely new object was created to implement 
+the stack. However, a stack is almost identical to the built-in list 
+object. Therefore, an alternative approach would be to inherit 
+from `list` and add an extra method:
+
+```python
+>>> class Stack(list):
+...     # Add push() method for stack interface
+...     # Note: lists already provide a pop() method.
+...     def push(self, object):
+...         self.append(object)
+...
+>>> s = Stack()    # Create a stack
+>>> s
+[]
+>>> s.push("Ricky")    # Push some things onto it
+>>> s.push(83)
+>>> s.push([3, 5, 7, 9])
+>>> x = s.pop()
+>>> x
+[3, 5, 7, 9]
+>>> y = s.pop()
+>>> y
+83
+>>> del s    # Destroy s
+>>> s
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 's' is not defined
+```
+
+Normally, all of the methods defined within a class apply only to 
+instances of that class (that is, the objects that are created). 
+However, different kinds of methods can be defined such as static 
+methods familiar to C++ and Java programmers. For example:
+
+```python
+class EventHandler(object):
+    @staticmethod
+    def dispatcherThread():
+        while (1):
+            # Wait for requests
+            ...
+
+EventHandler.dispatcherThread()    # Call method like a function
+```
+
+In this case, `@staticmethod` declares the method that follows to be a 
+static method. The statement `@staticmethod` is an example of using an 
+a *decorator*.
