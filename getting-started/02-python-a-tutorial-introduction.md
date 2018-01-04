@@ -2831,3 +2831,190 @@ EventHandler.dispatcherThread()    # Call method like a function
 In this case, `@staticmethod` declares the method that follows to be a 
 static method. The statement `@staticmethod` is an example of using an 
 a *decorator*.
+
+### Errors and Exception Handling
+
+Handling Python errors or *exceptions* gracefully is an important part 
+of building robust programs. For example, in data analysis applications, 
+many functions only work on certain kinds of input. As an example, 
+Python's `float` function is capable of casting a string to a 
+floating-point number, but fails with `ValueError` on improper inputs. 
+Notice that if an error occurs in a program, an exception is raised and 
+a traceback message appears:
+
+```python
+>>> float('3.1415928')
+3.1415928
+>>> float('number')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: could not convert string to float: 'number'
+```
+
+The traceback message indicates the type of error that occurred, along 
+with its location. Normally, errors cause a program to terminate. 
+However, you can catch and handle exceptions using `try` and `except` 
+statements.
+
+Suppose we wanted a version of `float` that fails gracefully, returning 
+the input argument. We can do this by writing a function that encloses 
+the call to `float` in a `try / except` block:
+
+```python
+>>> def float_ext(x):
+...     try:
+...         return float(x)
+...     except:
+...         return x
+...
+```
+
+The code in the `except` part of the block will only be executed 
+if `float(x)` raises an exception:
+
+```python
+>>> float_ext('3.1415928')
+3.1415928
+>>> float_ext('number')
+'number'
+```
+
+You might notice that `float` can raise exceptions other 
+than `ValueError`:
+
+```python
+>>> float((5, 10))
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: float() argument must be a string or a number, not 'tuple'
+```
+
+You might want to only suppress `ValueError`, since a `TypeError` (the 
+input was not a string or numeric value) might indicate a legitimate bug 
+in your program. To do that, write the exception type after `except`:
+
+```python
+>>> def float_ext(x):
+...     try:
+...         return float(x)
+...     except ValueError:
+...         return x
+...
+```
+
+We have then:
+
+```python
+>>> float_ext((5, 10))
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 3, in float_ext
+TypeError: float() argument must be a string or a number, not 'tuple'
+```
+
+You can catch multiple exception types by writing a tuple of exception 
+types instead (the parentheses are required):
+
+```python
+>>> def float_ext(x):
+...     try:
+...         return float(x)
+...     except (TypeError, ValueError):
+...         return x
+...
+```
+
+Now, let's see how the code works:
+
+```python
+>>> float_ext('3.1415928')
+3.1415928
+>>> float_ext('number')
+'number'
+>>> float_ext((5, 10))
+(5, 10)
+```
+
+In some cases, you may not want to suppress an exception, but you want 
+some code to be executed regardless of whether the code in the `try` 
+block succeeds or not. To do this, use the `finally` statement:
+
+```python
+>>> f = open('datafile', 'w')
+>>> try:
+...     print("Python is fun!\n", file=f)
+... finally:
+...     f.close()
+...
+```
+
+Here, the file handle `f` will *always* get closed. Similarly, you can 
+have code that executes only if the `try` block succeeds using `else`:
+
+```python
+>>> f = open('datafile', 'w')
+>>> try:
+...     print("Python is fun!\n", file=f)
+... except:
+...     print('Failed')
+... else:
+...     print('Succeeded')
+... finally:
+...     f.close()
+...
+Succeeded
+```
+
+Now, let's see another example:
+
+```python
+>>> try:
+...     f = open('datafile2', 'r')
+... except IOError as e:
+...     print(e)
+...
+[Errno 2] No such file or directory: 'datafile2'
+```
+
+If an `IOError` occurs, details concerning the cause of the error are 
+placed in `e` and control passes to the code in the `except` block. If 
+some other kind of exception is raised, it's passed to the enclosing 
+code block (if any). If no errors occur, the code in the `except` block 
+is ignored. When an exception is handled, program execution resumes with 
+the statement that immediately follows the last except block. The 
+program does not return to the location where the exception occurred.
+
+The `raise` statement is used to signal an exception. When raising an 
+exception, you can use one of the built-in exceptions, like this:
+
+```python
+raise SystemExit(1)    # The program quits.
+```
+
+Also, it's possible to create your own exceptions.
+
+Proper management of system resources such as locks, files, and network 
+connections is often a tricky problem when combined with exception 
+handling. To simplify such programming, you can use the `with` statement 
+with certain kinds of objects. Here is an example of writing code that 
+uses a mutex lock:
+
+```python
+import threading
+message_lock = threading.Lock()
+...
+with message_lock:
+    messages.add(newmessage)
+```
+
+In this example, the `message_lock` object is automatically acquired 
+when the `with` statement executes. When execution leaves the context of 
+the `with` block, the lock is automatically released. This management 
+takes place regardless of what happens inside the `with` block. For 
+example, if an exception occurs, the lock is released when control 
+leaves the context of the block.
+
+The `with` statement is normally only compatible with objects related to 
+system resources or the execution environment such as files, 
+connections, and locks. However, user-defined objects can define their 
+own custom processing.
