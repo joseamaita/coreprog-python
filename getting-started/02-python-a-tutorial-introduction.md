@@ -3018,3 +3018,86 @@ The `with` statement is normally only compatible with objects related to
 system resources or the execution environment such as files, 
 connections, and locks. However, user-defined objects can define their 
 own custom processing.
+
+### Modules
+
+As your programs grow in size, you will want to break them into multiple 
+files for easier maintenance. To do this, Python allows you to put 
+definitions in a file and use them as a module that can be imported into 
+other programs and scripts. To create a module, put the relevant 
+statements and definitions into a file that has the same name as the 
+module. Be aware that the file must have a `.py` suffix. Here's an 
+example:
+
+```python
+#!/usr/bin/env python3
+# file: div.py
+# Module that provides a division and returns quotient and remainder
+
+def divide(a, b):
+    q = a // b
+    r = a - q * b
+    return q, r
+```
+
+To use your module in other programs, you can use the `import` 
+statement:
+
+```python
+>>> import div
+>>> a, b = div.divide(1456, 33)
+>>> a
+44
+>>> b
+4
+```
+
+The `import` statement creates a new namespace and executes all the 
+statements in the associated `.py` file within that namespace. To access 
+the contents of the namespace after import, simply use the name of the 
+module as a prefix, as in `div.divide()` in the preceding example.
+
+If you want to import a module using a different name, supply 
+the `import` statement with an optional `as` qualifier, as follows:
+
+```python
+>>> import div as foo
+>>> a, b = foo.divide(1456, 33)
+>>> a
+44
+>>> b
+4
+```
+
+To import specific definitions into the current namespace, use 
+the `from` statement:
+
+```python
+>>> from div import divide
+>>> a, b = divide(1456, 33)    # No longer need the div prefix
+>>> a
+44
+>>> b
+4
+```
+
+To load all of a module's contents into the current namespace, you can 
+also use (although discouraged):
+
+```python
+>>> from div import *
+```
+
+As with objects, the `dir()` function lists the contents of a module and 
+is a useful tool for interactive experimentation:
+
+```python
+>>> import string
+>>> dir(string)
+['Formatter', 'Template', '_ChainMap', '_TemplateMetaclass', '__all__', 
+'__builtins__', '__cached__', '__doc__', '__file__', '__loader__', 
+'__name__', '__package__', '__spec__', '_re', '_string', 
+'ascii_letters', 'ascii_lowercase', 'ascii_uppercase', 'capwords', 
+'digits', 'hexdigits', 'octdigits', 'printable', 'punctuation', 
+'whitespace']
+```
