@@ -43,6 +43,21 @@ that you'll want to read and learn.
 | [FlaskBook.com](https://flaskbook.com) | Companion site for the Flask book and training videos by Miguel Grinberg |
 | [Safari Books](https://www.safaribooksonline.com/search/?query=Miguel%20Grinberg) | Safari books and videos made by Miguel Grinberg |
 
+### H
+
+**Hettinger, Raymond**
+
+| Web Link | Description |
+| -------- | ----------- |
+| [Deep Thoughts by Raymond Hettinger &#124; Ruminations on Computers, Programming and Life](https://rhettinger.wordpress.com/) | Personal blog on computers, programming and life |
+| [Twitter](https://twitter.com/raymondh) | Twitter account |
+| [GitHub](https://github.com/rhettinger) | GitHub account |
+| [Facebook](https://www.facebook.com/raymondh) | Facebook account |
+| [LinkedIn](https://www.linkedin.com/in/raymondhettinger) | LinkedIn account |
+| [Modern Python - Big Ideas and Little Code in Python](https://www.safaribooksonline.com/library/view/modern-python-livelessons/9780134743400/) | Video training series |
+| [Transforming Code into Beautiful, Idiomatic Python](https://www.youtube.com/watch?v=OSGv2VnC0go) | "Transforming Code into Beautiful, Idiomatic Python" lecture (PyCon US 2013) |
+| [Thinking About Concurrency](https://www.youtube.com/watch?v=Bv25Dwe84g0) | "Thinking About Concurrency" lecture (PyCon Russia 2016) |
+
 ### P
 
 **python.org**
