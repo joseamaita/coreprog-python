@@ -3101,3 +3101,300 @@ is a useful tool for interactive experimentation:
 'digits', 'hexdigits', 'octdigits', 'printable', 'punctuation', 
 'whitespace']
 ```
+
+### Files and the Operating System
+
+To open a file for reading or writing, use the built-in `open` function 
+with either a relative or absolute file path. But first, consider the 
+following file stored at *examples/segismundo.txt*:
+
+```
+Sueña el rico en su riqueza, 
+que más cuidados le ofrece; 
+
+sueña el pobre que padece, 
+su miseria y su pobreza; 
+
+sueña el que a medrar empieza, 
+sueña el que afana y pretende, 
+sueña el que agravia y ofende, 
+
+y en el mundo, en conclusión, 
+todos sueñan lo que son, 
+aunque ninguno lo entiende.
+
+
+```
+
+Then open, handle and print the lines of the file:
+
+```python
+>>> path = 'examples/segismundo.txt'
+>>> f = open(path)
+>>> for line in f:
+...     print(line)
+...
+Sueña el rico en su riqueza, 
+
+que más cuidados le ofrece; 
+
+
+
+sueña el pobre que padece, 
+
+su miseria y su pobreza; 
+
+
+
+sueña el que a medrar empieza, 
+
+sueña el que afana y pretende, 
+
+sueña el que agravia y ofende, 
+
+
+
+y en el mundo, en conclusión, 
+
+todos sueñan lo que son, 
+
+aunque ninguno lo entiende.
+
+
+
+
+```
+
+By default, the file is opened in read-only mode `'r'`. We can then 
+treat the file handle `f` like a list and iterate over the lines. Notice 
+how the lines come out of the file with the end-of-line (EOL) markers 
+intact.
+
+To fix that, a different approach to get an end-of-line (EOL) free list 
+of lines in a file would be something like this:
+
+```python
+>>> lines = [x.rstrip() for x in open(path)]
+>>> lines
+['Sueña el rico en su riqueza,', 
+ 'que más cuidados le ofrece;', 
+ '', 
+ 'sueña el pobre que padece,', 
+ 'su miseria y su pobreza;', 
+ '', 
+ 'sueña el que a medrar empieza,', 
+ 'sueña el que afana y pretende,', 
+ 'sueña el que agravia y ofende,', 
+ '', 
+ 'y en el mundo, en conclusión,', 
+ 'todos sueñan lo que son,', 
+ 'aunque ninguno lo entiende.', 
+ '']
+```
+
+When you use `open` to create file objects, it is important to 
+explicitly close the file when you are finished with it. Closing the 
+file releases its resources back to the operating system:
+
+```python
+>>> f.close()
+```
+
+One of the ways to make it easier to clean up open files is to use 
+the `with` statement:
+
+```python
+>>> path = 'examples/segismundo.txt'
+>>> with open(path) as f:
+...     lines = [x.rstrip() for x in f]
+...
+>>> lines
+['Sueña el rico en su riqueza,', 
+ 'que más cuidados le ofrece;', 
+ '', 
+ 'sueña el pobre que padece,', 
+ 'su miseria y su pobreza;', 
+ '', 
+ 'sueña el que a medrar empieza,', 
+ 'sueña el que afana y pretende,', 
+ 'sueña el que agravia y ofende,', 
+ '', 
+ 'y en el mundo, en conclusión,', 
+ 'todos sueñan lo que son,', 
+ 'aunque ninguno lo entiende.', 
+ '']
+```
+
+This will automatically close the file `f` when exiting the `with` 
+block.
+
+If we had typed `f = open(path, 'w')`, a *new file* 
+at *examples/segismundo.txt* would have been created (be careful!), 
+overwriting any one in its place. There is also the `'x'` file mode, 
+which creates a writable file but fails if the file path already exists. 
+The `'a'` file mode appends to existing file (create the file if it does 
+not already exist).
+
+For readable files, some of the most commonly used methods are `read`
+, `seek`, and `tell`. `read` returns a certain number of characters from 
+the file. What constitutes a "character" is determined by the file's 
+encoding (e.g., UTF-8) or simply raw bytes if the file is opened in 
+binary mode:
+
+```python
+>>> path = 'examples/segismundo.txt'
+>>> f = open(path)
+>>> f.read(15)
+'Sueña el rico e'
+>>> f2 = open(path, 'rb')    # Binary mode
+>>> f2.read(15)
+b'Sue\xc3\xb1a el rico '
+```
+
+The `read` method advances the file handle's position by the number of 
+bytes read. `tell` gives you the current position:
+
+```python
+>>> f.tell()
+16
+>>> f2.tell()
+15
+```
+
+Even though we read 10 characters from the file, the position is 11 
+because it took that many bytes to decode 10 characters using the 
+default encoding. You can check the default encoding in the `sys` 
+module:
+
+```python
+>>> import sys
+>>> sys.getdefaultencoding()
+'utf-8'
+```
+
+The method `seek` changes the file position to the indicated byte in the 
+file:
+
+```python
+>>> f.seek(3)
+3
+>>> f.read(1)
+'ñ'
+```
+
+Lastly, we remember to close the files:
+
+```python
+>>> f.close()
+>>> f2.close()
+```
+
+To write text to a file, you can use the file's `write` or `writelines` 
+methods. For example, we could create a script version with no blank 
+lines like this:
+
+```python
+>>> path = 'examples/segismundo.txt'
+>>> with open('tmp.txt', 'wt') as handle:
+...     handle.writelines(x for x in open(path) if len(x) > 1)
+...
+>>> with open('tmp.txt') as f:
+...     lines = f.readlines()
+...
+>>> lines
+['Sueña el rico en su riqueza, \n', 
+ 'que más cuidados le ofrece; \n', 
+ 'sueña el pobre que padece, \n', 
+ 'su miseria y su pobreza; \n', 
+ 'sueña el que a medrar empieza, \n', 
+ 'sueña el que afana y pretende, \n', 
+ 'sueña el que agravia y ofende, \n', 
+ 'y en el mundo, en conclusión, \n', 
+ 'todos sueñan lo que son, \n', 
+ 'aunque ninguno lo entiende.\n']
+```
+
+**Bytes and Unicode with Files**
+
+The default behavior for Python files (whether readable or writable) 
+is *text mode*, which means that you intend to work with Python strings 
+(i.e., Unicode). This contrasts with *binary mode*, which you can obtain 
+by appending `b` onto the file mode. Let's look at the file (which 
+contains non-ASCII characters with UTF-8 encoding) from the previous 
+part:
+
+```python
+>>> path = 'examples/segismundo.txt'
+>>> with open(path) as f:
+...     chars = f.read(10)
+...
+>>> chars
+'Sueña el r'
+```
+
+UTF-8 is a variable-length Unicode encoding, so when I requested some 
+number of characters from the file, Python reads enough bytes (which 
+could be as few as 10 or as many as 40 bytes) from the file to decode 
+that many characters. If I open the file in `'rb'` mode instead, `read` 
+requests exact numbers of bytes:
+
+```python
+>>> path = 'examples/segismundo.txt'
+>>> with open(path, 'rb') as f:
+...     data = f.read(10)
+...
+>>> data
+b'Sue\xc3\xb1a el '
+```
+
+Depending on the text encoding, you may be able to decode the bytes to 
+a `str` object yourself, but only if each of the encoded Unicode 
+characters is fully formed:
+
+```python
+>>> data.decode('utf8')
+'Sueña el '
+>>> data[:4].decode('utf8')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc3 in position 3: unexpected end of data
+>>> data[:5].decode('utf8')
+'Sueñ'
+```
+
+Text mode, combined with the `encoding` option of `open`, provides a 
+convenient way to convert from one Unicode encoding to another:
+
+```python
+>>> path = 'examples/segismundo.txt'
+>>> sink_path = 'sink.txt'
+>>> with open(path) as source:
+...     with open(sink_path, 'xt', encoding='iso-8859-1') as sink:
+...         sink.write(source.read())
+...
+298
+>>> with open(sink_path, encoding='iso-8859-1') as f:
+...     print(f.read(10))
+...
+Sueña el r
+```
+
+Beware using `seek` when opening files in any mode other than binary. If 
+the file position falls in the middle of the bytes defining a Unicode 
+character, then subsequent reads will result in an error:
+
+```python
+>>> path = 'examples/segismundo.txt'
+>>> f = open(path)
+>>> f.read(5)
+'Sueña'
+>>> f.seek(4)
+4
+>>> f.read(1)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/lib/python3.6/codecs.py", line 321, in decode
+    (result, consumed) = self._buffer_decode(data, self.errors, final)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb1 in position 0: invalid start byte
+>>> f.close()
+```
