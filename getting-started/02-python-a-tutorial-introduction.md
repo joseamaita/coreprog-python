@@ -3398,3 +3398,183 @@ Traceback (most recent call last):
 UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb1 in position 0: invalid start byte
 >>> f.close()
 ```
+
+### Getting Help
+
+When working with Python, you have several sources of quickly available 
+information. First, when Python is running in interactive mode, you can 
+use the `help()` command to get information about built-in modules and 
+other aspects of Python. Simply type `help()` by itself for general 
+information or `help('modulename')` for information about a specific 
+module. The `help()` command can also be used to return information 
+about specific functions if you supply a function name. Let's see:
+
+```python
+>>> help()
+
+Welcome to Python 3.6's help utility!
+
+If this is your first time using Python, you should definitely check out
+the tutorial on the Internet at http://docs.python.org/3.6/tutorial/.
+
+Enter the name of any module, keyword, or topic to get help on writing
+Python programs and using Python modules.  To quit this help utility and
+return to the interpreter, just type "quit".
+
+To get a list of available modules, keywords, symbols, or topics, type
+"modules", "keywords", "symbols", or "topics".  Each module also comes
+with a one-line summary of what it does; to list the modules whose name
+or summary contain a given string such as "spam", type "modules spam".
+
+help>
+```
+
+For information about a specific module:
+
+```python
+>>> help('string')
+Help on module string:
+
+NAME
+    string - A collection of string constants.
+
+MODULE REFERENCE
+    https://docs.python.org/3.6/library/string
+
+    The following documentation is automatically generated from the Python
+    source files.  It may be incomplete, incorrect or include features that
+    are considered implementation detail and may vary between Python
+    implementations.  When in doubt, consult the module reference at the
+    location listed above.
+
+DESCRIPTION
+    Public module variables:
+
+    whitespace -- a string containing all ASCII whitespace
+    ascii_lowercase -- a string containing all ASCII lowercase letters
+    ascii_uppercase -- a string containing all ASCII uppercase letters
+    ascii_letters -- a string containing all ASCII letters
+    digits -- a string containing all ASCII decimal digits
+    hexdigits -- a string containing all ASCII hexadecimal digits
+    octdigits -- a string containing all ASCII octal digits
+    punctuation -- a string containing all ASCII punctuation characters
+    printable -- a string containing all ASCII characters considered printable
+
+CLASSES
+    builtins.object
+        Formatter
+        Template
+
+    class Formatter(builtins.object)
+     |  Methods defined here:
+     |
+     |  check_unused_args(self, used_args, args, kwargs)
+     |
+     |  convert_field(self, value, conversion)
+     |
+     |  format(*args, **kwargs)
+     |
+     |  format_field(self, value, format_spec)
+     |
+     |  get_field(self, field_name, args, kwargs)
+     |      # given a field_name, find the object it references.
+     |      #  field_name:   the field being looked up, e.g. "0.name"
+     |      #                 or "lookup[3]"
+     |      #  used_args:    a set of which args have been used
+     |      #  args, kwargs: as passed in to vformat
+     |
+     |  get_value(self, key, args, kwargs)
+     |
+     |  parse(self, format_string)
+     |      # returns an iterable that contains tuples of the form:
+     |      # (literal_text, field_name, format_spec, conversion)
+     |      # literal_text can be zero length
+     |      # field_name can be None, in which case there's no
+     |      #  object to format and output
+     |      # if field_name is not None, it is looked up, formatted
+     |      #  with format_spec and conversion and then used
+     |
+     |  vformat(self, format_string, args, kwargs)
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+...
+```
+
+Most Python functions have documentation strings that describe their 
+usage. To print the doc string, simply print the `__doc__` attribute. 
+Here's an example:
+
+```python
+>>> print(repr.__doc__)
+Return the canonical string representation of the object.
+
+For many object types, including most builtins, eval(repr(obj)) == obj.
+```
+
+Last, but not least, most Python installations also include the 
+command `pydoc3`, which can be used to return documentation about Python 
+modules:
+
+```
+$ pydoc3
+pydoc - the Python documentation tool
+
+pydoc3 <name> ...
+    Show text documentation on something.  <name> may be the name of a
+    Python keyword, topic, function, module, or package, or a dotted
+    reference to a class or function within a module or module in a
+    package.  If <name> contains a '/', it is used as the path to a
+    Python source file to document. If name is 'keywords', 'topics',
+    or 'modules', a listing of these things is displayed.
+
+pydoc3 -k <keyword>
+    Search for a keyword in the synopsis lines of all available modules.
+
+pydoc3 -p <port>
+    Start an HTTP server on the given port on the local machine.  Port
+    number 0 can be used to get an arbitrary unused port.
+
+pydoc3 -b
+    Start an HTTP server on an arbitrary unused port and open a Web browser
+    to interactively browse documentation.  The -p option can be used with
+    the -b option to explicitly specify the server port.
+
+pydoc3 -w <name> ...
+    Write out the HTML documentation for a module to a file in the current
+    directory.  If <name> contains a '/', it is treated as a filename; if
+    it names a directory, documentation is written for all the contents.
+```
+
+Simply type `pydoc3 topic` at a system command prompt:
+
+```
+$ pydoc3 asyncio
+Help on package asyncio:
+
+NAME
+    asyncio - The asyncio package, tracking PEP 3156.
+
+MODULE REFERENCE
+    http://docs.python.org/3.4/library/asyncio
+
+    The following documentation is automatically generated from the Python
+    source files.  It may be incomplete, incorrect or include features that
+    are considered implementation detail and may vary between Python
+    implementations.  When in doubt, consult the module reference at the
+    location listed above.
+
+PACKAGE CONTENTS
+    base_events
+    base_subprocess
+    constants
+    coroutines
+    events
+    futures
+    locks
+    log
+...
+```
