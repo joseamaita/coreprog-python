@@ -11,3 +11,4 @@ structures contained in the `collections` module.
 * Unpacking a sequence into separate variables
 * Unpacking elements from iterables of arbitrary length
 * Merging two dictionaries in a basic way
+* Testing multiple flags at once
