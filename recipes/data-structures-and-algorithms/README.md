@@ -13,3 +13,4 @@ structures contained in the `collections` module.
 * Merging two dictionaries in a basic way
 * Testing multiple flags at once
 * Sorting dictionary by value
+* Handling multiple test cases with dictionary mapping
