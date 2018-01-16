@@ -7,3 +7,4 @@ encapsulation techniques, inheritance, memory management, and useful
 design patterns.
 
 * Defining a class in a basic way
+* Using a class instance as a structure or record
