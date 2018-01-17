@@ -8,3 +8,4 @@ design patterns.
 
 * Defining a class in a basic way
 * Using a class instance as a structure or record
+* Adding methods to a class
