@@ -55,3 +55,40 @@ Reading CSV data from 'stocks.csv' as lists ...
     ['C', '53.08', '6/11/2007', '9:36am', '-0.25', '360900']
     ['CAT', '78.29', '6/11/2007', '9:36am', '-0.23', '225400']
 ```
+
+**Reading CSV data as tuples**
+
+Here's how you would read the data as a sequence of tuples:
+
+```python
+#!/usr/bin/env python3
+
+import csv
+
+filename = "stocks.csv"
+
+print(f"\nReading CSV data from '{filename}' as tuples ...\n")
+with open(filename) as f:
+    f_csv = csv.reader(f)
+    headers_l = next(f_csv)
+    headers = tuple(headers_l)
+    print(f"    {headers}")
+    for row_l in f_csv:
+        # process row
+        row = tuple(row_l)
+        print(f"    {row}")
+```
+
+After running the script, the output is:
+
+```
+Reading CSV data from 'stocks.csv' as tuples ...
+
+    ('Symbol', 'Price', 'Date', 'Time', 'Change', 'Volume')
+    ('AA', '39.48', '6/11/2007', '9:36am', '-0.18', '181800')
+    ('AIG', '71.38', '6/11/2007', '9:36am', '-0.15', '195500')
+    ('AXP', '62.58', '6/11/2007', '9:36am', '-0.46', '935000')
+    ('BA', '98.31', '6/11/2007', '9:36am', '+0.12', '104800')
+    ('C', '53.08', '6/11/2007', '9:36am', '-0.25', '360900')
+    ('CAT', '78.29', '6/11/2007', '9:36am', '-0.23', '225400')
+```
