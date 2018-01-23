@@ -92,3 +92,51 @@ Reading CSV data from 'stocks.csv' as tuples ...
     ('C', '53.08', '6/11/2007', '9:36am', '-0.25', '360900')
     ('CAT', '78.29', '6/11/2007', '9:36am', '-0.23', '225400')
 ```
+
+**Reading CSV data as namedtuples**
+
+In the preceding code block, `row` will be a tuple. Thus, to access 
+certain fields, you will need to use indexing, such as `row[0]` (Symbol) 
+and `row[5]` (Volume).
+
+Since such indexing can often be confusing, this is one place where you 
+might want to consider the use of named tuples. For example:
+
+```python
+#!/usr/bin/env python3
+
+import csv
+from collections import namedtuple
+
+filename = "stocks.csv"
+
+print(f"\nReading CSV data from '{filename}' as namedtuples ...\n")
+with open(filename) as f:
+    f_csv = csv.reader(f)
+    Row = namedtuple('Row', next(f_csv))
+    for r in f_csv:
+        row = Row(*r)
+        # process row
+        print(f"    {row}")
+        # print(f"    {row.Symbol}")
+        # print(f"    {row.Volume}")
+```
+
+After running the script, the output is:
+
+```
+Reading CSV data from 'stocks.csv' as namedtuples ...
+
+    Row(Symbol='AA', Price='39.48', Date='6/11/2007', Time='9:36am', Change='-0.18', Volume='181800')
+    Row(Symbol='AIG', Price='71.38', Date='6/11/2007', Time='9:36am', Change='-0.15', Volume='195500')
+    Row(Symbol='AXP', Price='62.58', Date='6/11/2007', Time='9:36am', Change='-0.46', Volume='935000')
+    Row(Symbol='BA', Price='98.31', Date='6/11/2007', Time='9:36am', Change='+0.12', Volume='104800')
+    Row(Symbol='C', Price='53.08', Date='6/11/2007', Time='9:36am', Change='-0.25', Volume='360900')
+    Row(Symbol='CAT', Price='78.29', Date='6/11/2007', Time='9:36am', Change='-0.23', Volume='225400')
+```
+
+This would allow you to use the column headers such as `row.Symbol` 
+and `row.Volume` instead of indices. It should be noted that this only 
+works if the column headers are valid Python identifiers. If not, you 
+might have to massage the initial headings (e.g., replacing 
+nonidentifier characters with underscores or similar).
