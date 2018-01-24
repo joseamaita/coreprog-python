@@ -140,3 +140,41 @@ and `row.Volume` instead of indices. It should be noted that this only
 works if the column headers are valid Python identifiers. If not, you 
 might have to massage the initial headings (e.g., replacing 
 nonidentifier characters with underscores or similar).
+
+**Reading CSV data as dictionaries**
+
+Another alternative is to read the data as a sequence of dictionaries 
+instead. To do that, use this code:
+
+```python
+#!/usr/bin/env python3
+
+import csv
+
+filename = "stocks.csv"
+
+print(f"\nReading CSV data from '{filename}' as dictionaries ...\n")
+with open(filename) as f:
+    f_csv = csv.DictReader(f)
+    for row in f_csv:
+        # process row
+        print(f"    {row}")
+        # print(f"    {row['Symbol']}")
+        # print(f"    {row['Volume']}")
+```
+
+In this version, you would access the elements of each row using the row 
+headers. For example, `row['Symbol']` or `row['Volume']`.
+
+After running the script, the output is:
+
+```
+Reading CSV data from 'stocks.csv' as dictionaries ...
+
+    OrderedDict([('Symbol', 'AA'), ('Price', '39.48'), ('Date', '6/11/2007'), ('Time', '9:36am'), ('Change', '-0.18'), ('Volume', '181800')])
+    OrderedDict([('Symbol', 'AIG'), ('Price', '71.38'), ('Date', '6/11/2007'), ('Time', '9:36am'), ('Change', '-0.15'), ('Volume', '195500')])
+    OrderedDict([('Symbol', 'AXP'), ('Price', '62.58'), ('Date', '6/11/2007'), ('Time', '9:36am'), ('Change', '-0.46'), ('Volume', '935000')])
+    OrderedDict([('Symbol', 'BA'), ('Price', '98.31'), ('Date', '6/11/2007'), ('Time', '9:36am'), ('Change', '+0.12'), ('Volume', '104800')])
+    OrderedDict([('Symbol', 'C'), ('Price', '53.08'), ('Date', '6/11/2007'), ('Time', '9:36am'), ('Change', '-0.25'), ('Volume', '360900')])
+    OrderedDict([('Symbol', 'CAT'), ('Price', '78.29'), ('Date', '6/11/2007'), ('Time', '9:36am'), ('Change', '-0.23'), ('Volume', '225400')])
+```
