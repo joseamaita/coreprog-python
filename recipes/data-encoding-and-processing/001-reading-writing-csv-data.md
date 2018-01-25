@@ -178,3 +178,39 @@ Reading CSV data from 'stocks.csv' as dictionaries ...
     OrderedDict([('Symbol', 'C'), ('Price', '53.08'), ('Date', '6/11/2007'), ('Time', '9:36am'), ('Change', '-0.25'), ('Volume', '360900')])
     OrderedDict([('Symbol', 'CAT'), ('Price', '78.29'), ('Date', '6/11/2007'), ('Time', '9:36am'), ('Change', '-0.23'), ('Volume', '225400')])
 ```
+
+**Writing CSV data from headers as list and rows as list of tuples**
+
+To write CSV data, you also use the `csv` module but create a writer 
+object. Notice that the headers are stored as a list and the rows are 
+stored as list of tuples. For example:
+
+```python
+#!/usr/bin/env python3
+
+import csv
+
+headers = ['Symbol', 'Price', 'Date', 'Time', 'Change', 'Volume']
+rows = [
+('AA', 39.48, '6/11/2007', '9:36am', -0.18, 181800), 
+('AIG', 71.38, '6/11/2007', '9:36am', -0.15, 195500), 
+('AXP', 62.58, '6/11/2007', '9:36am', -0.46, 935000), 
+]
+
+filename = "stocks_b.csv"
+
+print(f"\nWriting CSV data to '{filename}' ...\n")
+with open(filename, 'w') as f:
+    f_csv = csv.writer(f)
+    f_csv.writerow(headers)
+    f_csv.writerows(rows)
+```
+
+The generated output file is:
+
+```
+Symbol,Price,Date,Time,Change,Volume
+AA,39.48,6/11/2007,9:36am,-0.18,181800
+AIG,71.38,6/11/2007,9:36am,-0.15,195500
+AXP,62.58,6/11/2007,9:36am,-0.46,935000
+```
