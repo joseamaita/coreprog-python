@@ -7,3 +7,4 @@ section is not focused on specific algorithms, but instead on the
 problem of getting data in and out of a program.
 
 * Reading and writing CSV data
+* Reading and writing JSON data
