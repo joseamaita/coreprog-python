@@ -143,3 +143,41 @@ Reading JSON data from 'colors2.json' ...
 
 {'aliceblue': [240, 248, 255, 1], 'antiquewhite': [250, 235, 215, 1], 'aqua': [0, 255, 255, 1], 'aquamarine': [127, 255, 212, 1], 'azure': [240, 255, 255, 1], 'beige': [245, 245, 220, 1], 'bisque': [255, 228, 196, 1], 'black': [0, 0, 0, 1], 'blanchedalmond': [255, 235, 205, 1], 'blue': [0, 0, 255, 1], 'blueviolet': [138, 43, 226, 1], 'brown': [165, 42, 42, 1], 'burlywood': [222, 184, 135, 1], 'cadetblue': [95, 158, 160, 1], 'chartreuse': [127, 255, 0, 1], 'chocolate': [210, 105, 30, 1], 'coral': [255, 127, 80, 1], 'cornflowerblue': [100, 149, 237, 1], 'cornsilk': [255, 248, 220, 1], 'crimson': [220, 20, 60, 1], 'cyan': [0, 255, 255, 1]}
 ```
+
+**Writing JSON data to a file**
+
+Next, let's see an application that writes JSON data to a file:
+
+```python
+#!/usr/bin/env python3
+# Run it as -> ./script name_of_json_file (./script data)
+
+import sys
+import json
+
+data = {
+  "aliceblue": "#f0f8ff",
+  "antiquewhite": "#faebd7",
+  "aqua": "#00ffff",
+  "aquamarine": "#7fffd4",
+  "azure": "#f0ffff"
+}
+
+def main():
+    filename = sys.argv[1] + ".json"
+    print(f"\nWriting JSON data to '{filename}' ...\n")
+    if len(sys.argv) != 2:
+        print("Please supply a filename only!\n\n")
+        raise SystemExit(1)
+    with open(filename, 'w') as f:
+        json.dump(data, f)
+
+if __name__ == '__main__':
+    main()
+```
+
+After running the script to *data.json*, the output is:
+
+```json
+{"aliceblue": "#f0f8ff", "antiquewhite": "#faebd7", "aqua": "#00ffff", "aquamarine": "#7fffd4", "azure": "#f0ffff"}
+```
