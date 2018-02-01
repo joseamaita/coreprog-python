@@ -181,3 +181,35 @@ After running the script to *data.json*, the output is:
 ```json
 {"aliceblue": "#f0f8ff", "antiquewhite": "#faebd7", "aqua": "#00ffff", "aquamarine": "#7fffd4", "azure": "#f0ffff"}
 ```
+
+### Discussion
+
+**Basic JSON encoding**
+
+JSON encoding supports the basic types of `None`, `bool`, `int`, `float` 
+, and `str`, as well as lists, tuples, and dictionaries containing those 
+types. For dictionaries, keys are assumed to be strings (any nonstring 
+keys in a dictionary are converted to strings when encoding). To be 
+compliant with the JSON specification, you should only encode Python 
+lists and dictionaries. Moreover, in web applications, it is standard 
+practice for the top-level object to be a dictionary.
+
+The format of JSON encoding is almost identical to Python syntax except 
+for a few minor changes. For instance, `True` is mapped to `true`
+, `False` is mapped to `false`, and `None` is mapped to `null`. Here is 
+an example that shows what the encoding looks like:
+
+```python
+>>> import json
+>>> json.dumps(False)
+'false'
+>>> d = {
+... 'a': True,
+... 'b': 'Hello',
+... 'c': None,
+... }
+>>> d
+{'a': True, 'b': 'Hello', 'c': None}
+>>> json.dumps(d)
+'{"a": true, "b": "Hello", "c": null}'
+```
