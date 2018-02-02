@@ -213,3 +213,54 @@ an example that shows what the encoding looks like:
 >>> json.dumps(d)
 '{"a": true, "b": "Hello", "c": null}'
 ```
+
+**Examining JSON data**
+
+If you are trying to examine data you have decoded from JSON, it can 
+often be hard to ascertain its structure simply by printing it out, 
+especially if the data contains a deep level of nested structures or a 
+lot of fields. To assist with this, consider using the `pprint()` 
+function in the `pprint` module. This will alphabetize the keys and 
+output a dictionary in a more sane way. Here is an example that 
+illustrates how you would pretty print the results of a query on GitHub 
+(make sure the `requests` module is already installed):
+
+```python
+>>> from pprint import pprint
+>>> import requests
+>>> r = requests.get('https://api.github.com/users/dabeaz')
+>>> resp = r.json()
+>>> print(resp)
+{'login': 'dabeaz', 'id': 350836, 'avatar_url': 'https://avatars2.githubusercontent.com/u/350836?v=4', 'gravatar_id': '', 'url': 'https://api.github.com/users/dabeaz', 'html_url': 'https://github.com/dabeaz', 'followers_url': 'https://api.github.com/users/dabeaz/followers', 'following_url': 'https://api.github.com/users/dabeaz/following{/other_user}', 'gists_url': 'https://api.github.com/users/dabeaz/gists{/gist_id}', 'starred_url': 'https://api.github.com/users/dabeaz/starred{/owner}{/repo}', 'subscriptions_url': 'https://api.github.com/users/dabeaz/subscriptions', 'organizations_url': 'https://api.github.com/users/dabeaz/orgs', 'repos_url': 'https://api.github.com/users/dabeaz/repos', 'events_url': 'https://api.github.com/users/dabeaz/events{/privacy}', 'received_events_url': 'https://api.github.com/users/dabeaz/received_events', 'type': 'User', 'site_admin': False, 'name': 'David Beazley', 'company': 'Dabeaz, LLC', 'blog': 'http://www.dabeaz.com', 'location': 'Chicago', 'email': None, 'hireable': None, 'bio': 'I dabble in Python. ', 'public_repos': 17, 'public_gists': 6, 'followers': 1468, 'following': 0, 'created_at': '2010-08-01T15:22:48Z', 'updated_at': '2017-12-19T18:40:45Z'}
+>>> pprint(resp)
+{'avatar_url': 'https://avatars2.githubusercontent.com/u/350836?v=4',
+ 'bio': 'I dabble in Python. ',
+ 'blog': 'http://www.dabeaz.com',
+ 'company': 'Dabeaz, LLC',
+ 'created_at': '2010-08-01T15:22:48Z',
+ 'email': None,
+ 'events_url': 'https://api.github.com/users/dabeaz/events{/privacy}',
+ 'followers': 1468,
+ 'followers_url': 'https://api.github.com/users/dabeaz/followers',
+ 'following': 0,
+ 'following_url': 'https://api.github.com/users/dabeaz/following{/other_user}',
+ 'gists_url': 'https://api.github.com/users/dabeaz/gists{/gist_id}',
+ 'gravatar_id': '',
+ 'hireable': None,
+ 'html_url': 'https://github.com/dabeaz',
+ 'id': 350836,
+ 'location': 'Chicago',
+ 'login': 'dabeaz',
+ 'name': 'David Beazley',
+ 'organizations_url': 'https://api.github.com/users/dabeaz/orgs',
+ 'public_gists': 6,
+ 'public_repos': 17,
+ 'received_events_url': 'https://api.github.com/users/dabeaz/received_events',
+ 'repos_url': 'https://api.github.com/users/dabeaz/repos',
+ 'site_admin': False,
+ 'starred_url': 'https://api.github.com/users/dabeaz/starred{/owner}{/repo}',
+ 'subscriptions_url': 'https://api.github.com/users/dabeaz/subscriptions',
+ 'type': 'User',
+ 'updated_at': '2017-12-19T18:40:45Z',
+ 'url': 'https://api.github.com/users/dabeaz'}
+```
