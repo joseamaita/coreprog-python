@@ -264,3 +264,26 @@ illustrates how you would pretty print the results of a query on GitHub
  'updated_at': '2017-12-19T18:40:45Z',
  'url': 'https://api.github.com/users/dabeaz'}
 ```
+
+**Decoding JSON data into an OrderedDict**
+
+Normally, JSON decoding will create dicts or lists from the supplied 
+data. If you want to create different kinds of objects, supply 
+the `object_pairs_hook` or `object_hook` to `json.loads()`. For example, 
+here is how you would decode JSON data, preserving its order in 
+an `OrderedDict`:
+
+```python
+>>> import json
+>>> s = '{"name": ["GOOG", "AA", "AIG"], "shares": [75, 60, 125], "price": [380.13, 14.20, 0.99]}'
+>>> from collections import OrderedDict
+>>> data = json.loads(s, object_pairs_hook=OrderedDict)
+>>> print(data)
+OrderedDict([('name', ['GOOG', 'AA', 'AIG']), ('shares', [75, 60, 125]), ('price', [380.13, 14.2, 0.99])])
+>>> data['name']
+['GOOG', 'AA', 'AIG']
+>>> data['shares']
+[75, 60, 125]
+>>> data['price']
+[380.13, 14.2, 0.99]
+```
