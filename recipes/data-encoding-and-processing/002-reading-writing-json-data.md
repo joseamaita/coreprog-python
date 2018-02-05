@@ -287,3 +287,30 @@ OrderedDict([('name', ['GOOG', 'AA', 'AIG']), ('shares', [75, 60, 125]), ('price
 >>> data['price']
 [380.13, 14.2, 0.99]
 ```
+
+**Converting a JSON dictionary into a Python object**
+
+Here is how you could turn a JSON dictionary into a Python object. But 
+first, let's see a `JSONObject` class definition and how it is 
+populated:
+
+```python
+>>> class JSONObject:
+...     def __init__(self, d):
+...         self.__dict__ = d
+...
+>>> import json
+>>> s = '{"name": ["GOOG", "AA", "AIG"], "shares": [75, 60, 125], "price": [380.13, 14.20, 0.99]}'
+>>> data = json.loads(s, object_hook=JSONObject)
+>>> print(data.name)
+['GOOG', 'AA', 'AIG']
+>>> print(data.shares)
+[75, 60, 125]
+>>> print(data.price)
+[380.13, 14.2, 0.99]
+```
+
+Here, the dictionary created by decoding the JSON data is passed as a 
+single argument to `__init__()`. From there, you are free to use it as 
+you will, such as using it directly as the instance dictionary of the 
+object.
