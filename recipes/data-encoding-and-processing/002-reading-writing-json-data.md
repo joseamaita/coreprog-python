@@ -314,3 +314,89 @@ Here, the dictionary created by decoding the JSON data is passed as a
 single argument to `__init__()`. From there, you are free to use it as 
 you will, such as using it directly as the instance dictionary of the 
 object.
+
+**Presenting nicely formatted JSON encoding**
+
+There are a few options that can be useful for encoding JSON. If you 
+would like the output to be nicely formatted, you can use the `indent` 
+argument to `json.dumps()`. This causes the output to be pretty printed 
+in a format similar to that with the `pprint()` function. For example:
+
+```python
+>>> import json
+>>> s = {"name": ["GOOG", "AA", "AIG"], "shares": [75, 60, 125], "price": [380.13, 14.20, 0.99]}
+>>> print(json.dumps(s))
+{"name": ["GOOG", "AA", "AIG"], "shares": [75, 60, 125], "price": [380.13, 14.2, 0.99]}
+>>> print(json.dumps(s, indent=4))
+{
+    "name": [
+        "GOOG",
+        "AA",
+        "AIG"
+    ],
+    "shares": [
+        75,
+        60,
+        125
+    ],
+    "price": [
+        380.13,
+        14.2,
+        0.99
+    ]
+}
+```
+
+If you want the keys to be sorted on output, use the `sort_keys` 
+argument:
+
+```python
+>>> print(json.dumps(s, indent=4, sort_keys=True))
+{
+    "name": [
+        "GOOG",
+        "AA",
+        "AIG"
+    ],
+    "price": [
+        380.13,
+        14.2,
+        0.99
+    ],
+    "shares": [
+        75,
+        60,
+        125
+    ]
+}
+```
+
+Also, if you want to write the JSON output to a file, do this:
+
+```python
+>>> with open('data1.json', 'w') as f:
+...     print(json.dumps(s, indent=4, sort_keys=True), file=f)
+...
+```
+
+The `data1.json` output is:
+
+```
+{
+    "name": [
+        "GOOG",
+        "AA",
+        "AIG"
+    ],
+    "price": [
+        380.13,
+        14.2,
+        0.99
+    ],
+    "shares": [
+        75,
+        60,
+        125
+    ]
+}
+```
