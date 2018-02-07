@@ -400,3 +400,75 @@ The `data1.json` output is:
     ]
 }
 ```
+
+**Encoding and decoding class instances as JSON data**
+
+Instances are not normally serializable as JSON. For example:
+
+```python
+>>> import json
+>>> class Point:
+...     def __init__(self, x, y):
+...         self.x = x
+...         self.y = y
+...
+>>> p = Point(2, 3)
+>>> json.dumps(p)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/lib/python3.6/json/__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+  File "/usr/local/lib/python3.6/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/local/lib/python3.6/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/usr/local/lib/python3.6/json/encoder.py", line 180, in default
+    o.__class__.__name__)
+TypeError: Object of type 'Point' is not JSON serializable
+```
+
+If you want to serialize instances, you can supply a function that takes 
+an instance as input and returns a dictionary that can be serialized. 
+For example:
+
+```python
+>>> def serialize_instance(obj):
+...     d = {'__classname__': type(obj).__name__}
+...     d.update(vars(obj))
+...     return d
+...
+>>> s = json.dumps(p, default=serialize_instance)
+>>> print(s)
+{"__classname__": "Point", "x": 2, "y": 3}
+```
+
+If you want to get an instance back, you could write code like this 
+(dictionary mapping names to known classes):
+
+```python
+>>> classes = {
+... 'Point': Point,
+... }
+>>> def unserialize_object(d):
+...     clsname = d.pop('__classname__', None)
+...     if clsname:
+...         cls = classes[clsname]
+...         obj = cls.__new__(cls)
+...         for key, value in d.items():
+...             setattr(obj, key, value)
+...         return obj
+...     else:
+...         return d
+...
+>>> a = json.loads(s, object_hook=unserialize_object)
+>>> print(a)
+<__main__.Point object at 0x7f3cbcefbc50>
+>>> print(a.x)
+2
+>>> print(a.y)
+3
+```
+
+The `json` module has a variety of other options for controlling the 
+low-level interpretation of numbers, special values such as `NaN`, and 
+more.
