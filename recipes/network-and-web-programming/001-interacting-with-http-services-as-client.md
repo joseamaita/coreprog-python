@@ -57,3 +57,56 @@ b'{\n  "args": {\n    "name1": "value1", \n    "name2": "value2"\n  }, \n  "head
     'origin': '190.198.181.54',
     'url': 'http://httpbin.org/get?name1=value1&name2=value2'}
 ```
+
+**Making a basic POST request**
+
+If you need to send the query parameters in the request body using 
+a `POST` method, encode them and supply them as an optional argument 
+to `urlopen()` like this:
+
+```python
+>>> # A basic POST request
+...
+>>> from urllib import request, parse
+>>> # Base URL being accessed
+...
+>>> url = 'http://httpbin.org/post'
+>>> # Dictionary of query parameters (if any)
+...
+>>> parms = {
+... 'name1': 'value1',
+... 'name2': 'value2',
+... }
+>>> # Encode the query string
+...
+>>> querystring = parse.urlencode(parms)
+>>> querystring
+'name1=value1&name2=value2'
+>>> # Make a POST request and read the response
+...
+>>> u = request.urlopen(url, querystring.encode('ascii'))
+>>> u
+<http.client.HTTPResponse object at 0x7ff7d5e1f710>
+>>> resp = u.read()
+>>> resp
+b'{\n  "args": {}, \n  "data": "", \n  "files": {}, \n  "form": {\n    "name1": "value1", \n    "name2": "value2"\n  }, \n  "headers": {\n    "Accept-Encoding": "identity", \n    "Connection": "close", \n    "Content-Length": "25", \n    "Content-Type": "application/x-www-form-urlencoded", \n    "Host": "httpbin.org", \n    "User-Agent": "Python-urllib/3.6"\n  }, \n  "json": null, \n  "origin": "190.198.181.54", \n  "url": "http://httpbin.org/post"\n}\n'
+>>> import json
+>>> from pprint import pprint
+>>> json_resp = json.loads(resp.decode('utf-8'))
+>>> json_resp
+{'args': {}, 'data': '', 'files': {}, 'form': {'name1': 'value1', 'name2': 'value2'}, 'headers': {'Accept-Encoding': 'identity', 'Connection': 'close', 'Content-Length': '25', 'Content-Type': 'application/x-www-form-urlencoded', 'Host': 'httpbin.org', 'User-Agent': 'Python-urllib/3.6'}, 'json': None, 'origin': '190.198.181.54', 'url': 'http://httpbin.org/post'}
+>>> pprint(json_resp, indent=4)
+{   'args': {},
+    'data': '',
+    'files': {},
+    'form': {'name1': 'value1', 'name2': 'value2'},
+    'headers': {   'Accept-Encoding': 'identity',
+                   'Connection': 'close',
+                   'Content-Length': '25',
+                   'Content-Type': 'application/x-www-form-urlencoded',
+                   'Host': 'httpbin.org',
+                   'User-Agent': 'Python-urllib/3.6'},
+    'json': None,
+    'origin': '190.198.181.54',
+    'url': 'http://httpbin.org/post'}
+```
