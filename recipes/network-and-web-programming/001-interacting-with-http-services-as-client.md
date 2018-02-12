@@ -110,3 +110,67 @@ b'{\n  "args": {}, \n  "data": "", \n  "files": {}, \n  "form": {\n    "name1": 
     'origin': '190.198.181.54',
     'url': 'http://httpbin.org/post'}
 ```
+
+**Making a POST request with some custom HTTP headers**
+
+If you need to supply some custom HTTP headers in the outgoing request 
+such as a change to the user-agent field, make a dictionary containing 
+their value and create a `Request` instance and pass it to `urlopen()` 
+like this:
+
+```python
+>>> # A POST request with some custom HTTP headers
+...
+>>> from urllib import request, parse
+>>> # Base URL being accessed
+...
+>>> url = 'http://httpbin.org/post'
+>>> # Dictionary of query parameters (if any)
+...
+>>> parms = {
+... 'name1': 'value1',
+... 'name2': 'value2',
+... }
+>>> # Encode the query string
+...
+>>> querystring = parse.urlencode(parms)
+>>> querystring
+'name1=value1&name2=value2'
+>>> # Extra headers
+...
+>>> headers = {
+... 'User-agent': 'none/ofyourbusiness',
+... 'Spam': 'Eggs',
+... }
+>>> req = request.Request(url, querystring.encode('ascii'), headers=headers)
+>>> req
+<urllib.request.Request object at 0x7fed36f14ba8>
+>>> # Make a request and read the response
+...
+>>> u = request.urlopen(req)
+>>> u
+<http.client.HTTPResponse object at 0x7fed346b1780>
+>>> resp = u.read()
+>>> resp
+b'{\n  "args": {}, \n  "data": "", \n  "files": {}, \n  "form": {\n    "name1": "value1", \n    "name2": "value2"\n  }, \n  "headers": {\n    "Accept-Encoding": "identity", \n    "Connection": "close", \n    "Content-Length": "25", \n    "Content-Type": "application/x-www-form-urlencoded", \n    "Host": "httpbin.org", \n    "Spam": "Eggs", \n    "User-Agent": "none/ofyourbusiness"\n  }, \n  "json": null, \n  "origin": "190.198.181.54", \n  "url": "http://httpbin.org/post"\n}\n'
+>>> import json
+>>> from pprint import pprint
+>>> json_resp = json.loads(resp.decode('utf-8'))
+>>> json_resp
+{'args': {}, 'data': '', 'files': {}, 'form': {'name1': 'value1', 'name2': 'value2'}, 'headers': {'Accept-Encoding': 'identity', 'Connection': 'close', 'Content-Length': '25', 'Content-Type': 'application/x-www-form-urlencoded', 'Host': 'httpbin.org', 'Spam': 'Eggs', 'User-Agent': 'none/ofyourbusiness'}, 'json': None, 'origin': '190.198.181.54', 'url': 'http://httpbin.org/post'}
+>>> pprint(json_resp, indent=4)
+{   'args': {},
+    'data': '',
+    'files': {},
+    'form': {'name1': 'value1', 'name2': 'value2'},
+    'headers': {   'Accept-Encoding': 'identity',
+                   'Connection': 'close',
+                   'Content-Length': '25',
+                   'Content-Type': 'application/x-www-form-urlencoded',
+                   'Host': 'httpbin.org',
+                   'Spam': 'Eggs',
+                   'User-Agent': 'none/ofyourbusiness'},
+    'json': None,
+    'origin': '190.198.181.54',
+    'url': 'http://httpbin.org/post'}
+```
