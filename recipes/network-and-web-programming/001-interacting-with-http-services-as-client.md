@@ -174,3 +174,66 @@ b'{\n  "args": {}, \n  "data": "", \n  "files": {}, \n  "form": {\n    "name1": 
     'origin': '190.198.181.54',
     'url': 'http://httpbin.org/post'}
 ```
+
+**Making a POST request using requests library**
+
+If your interaction with a service is more complicated than the code 
+above, you should probably look at the `requests` library. For example, 
+here is equivalent `requests` code for the preceding operations (make 
+sure the `requests` module is already installed):
+
+```python
+>>> # A POST request using requests library
+...
+>>> import requests
+>>> # Base URL being accessed
+...
+>>> url = 'http://httpbin.org/post'
+>>> # Dictionary of query parameters (if any)
+...
+>>> parms = {
+... 'name1': 'value1',
+... 'name2': 'value2',
+... }
+>>> # Extra headers
+...
+>>> headers = {
+... 'User-agent': 'none/ofyourbusiness',
+... 'Spam': 'Eggs',
+... }
+>>> resp = requests.post(url, data=parms, headers=headers)
+>>> resp
+<Response [200]>
+>>> # Decoded text returned by the request
+...
+>>> text = resp.text
+>>> text
+'{\n  "args": {}, \n  "data": "", \n  "files": {}, \n  "form": {\n    "name1": "value1", \n    "name2": "value2"\n  }, \n  "headers": {\n    "Accept": "*/*", \n    "Accept-Encoding": "gzip, deflate", \n    "Connection": "close", \n    "Content-Length": "25", \n    "Content-Type": "application/x-www-form-urlencoded", \n    "Host": "httpbin.org", \n    "Spam": "Eggs", \n    "User-Agent": "none/ofyourbusiness"\n  }, \n  "json": null, \n  "origin": "190.198.181.54", \n  "url": "http://httpbin.org/post"\n}\n'
+>>> content = resp.content
+>>> content
+b'{\n  "args": {}, \n  "data": "", \n  "files": {}, \n  "form": {\n    "name1": "value1", \n    "name2": "value2"\n  }, \n  "headers": {\n    "Accept": "*/*", \n    "Accept-Encoding": "gzip, deflate", \n    "Connection": "close", \n    "Content-Length": "25", \n    "Content-Type": "application/x-www-form-urlencoded", \n    "Host": "httpbin.org", \n    "Spam": "Eggs", \n    "User-Agent": "none/ofyourbusiness"\n  }, \n  "json": null, \n  "origin": "190.198.181.54", \n  "url": "http://httpbin.org/post"\n}\n'
+>>> from pprint import pprint
+>>> pprint(resp.json(), indent=4)
+{   'args': {},
+    'data': '',
+    'files': {},
+    'form': {'name1': 'value1', 'name2': 'value2'},
+    'headers': {   'Accept': '*/*',
+                   'Accept-Encoding': 'gzip, deflate',
+                   'Connection': 'close',
+                   'Content-Length': '25',
+                   'Content-Type': 'application/x-www-form-urlencoded',
+                   'Host': 'httpbin.org',
+                   'Spam': 'Eggs',
+                   'User-Agent': 'none/ofyourbusiness'},
+    'json': None,
+    'origin': '190.198.181.54',
+    'url': 'http://httpbin.org/post'}
+```
+
+A notable feature of `requests` is how it returns the resulting response 
+content from a request. As shown, the `resp.text` attribute gives you 
+the Unicode decoded text of a request. However, if you 
+access `resp.content`, you get the raw binary content instead. On the 
+other hand, if you access `resp.json()`, then you get the response 
+content interpreted as JSON.
