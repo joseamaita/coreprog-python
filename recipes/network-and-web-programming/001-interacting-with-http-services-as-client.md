@@ -237,3 +237,32 @@ the Unicode decoded text of a request. However, if you
 access `resp.content`, you get the raw binary content instead. On the 
 other hand, if you access `resp.json()`, then you get the response 
 content interpreted as JSON.
+
+**Making a HEAD request using requests library**
+
+Here is an example of using `requests` to make a `HEAD` request and 
+extract a few fields of header data from the response:
+
+```python
+>>> # A HEAD request using requests library
+...
+>>> import requests
+>>> resp = requests.head('https://www.python.org/')
+>>> resp
+<Response [200]>
+>>> status = resp.status_code
+>>> status
+200
+>>> headers = resp.headers
+>>> headers
+{'Server': 'nginx', 'Content-Type': 'text/html; charset=utf-8', 'X-Frame-Options': 'SAMEORIGIN', 'x-xss-protection': '1; mode=block', 'X-Clacks-Overhead': 'GNU Terry Pratchett', 'Via': '1.1 varnish, 1.1 varnish', 'Fastly-Debug-Digest': 'a63ab819df3b185a89db37a59e39f0dd85cf8ee71f54bbb42fae41670ae56fd2', 'Content-Length': '48869', 'Accept-Ranges': 'bytes', 'Date': 'Fri, 09 Feb 2018 16:57:29 GMT', 'Age': '2916', 'Connection': 'keep-alive', 'X-Served-By': 'cache-iad2130-IAD, cache-mia17622-MIA', 'X-Cache': 'HIT, HIT', 'X-Cache-Hits': '6, 28', 'X-Timer': 'S1518195449.085108,VS0,VE0', 'Vary': 'Cookie', 'Strict-Transport-Security': 'max-age=63072000; includeSubDomains'}
+>>> content_type = resp.headers['content-type']
+>>> content_type
+'text/html; charset=utf-8'
+>>> content_length = resp.headers['content-length']
+>>> content_length
+'48869'
+>>> server = resp.headers['server']
+>>> server
+'nginx'
+```
