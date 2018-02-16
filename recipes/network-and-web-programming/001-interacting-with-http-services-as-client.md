@@ -266,3 +266,116 @@ extract a few fields of header data from the response:
 >>> server
 'nginx'
 ```
+
+**Executing a login into the PyPI using basic authentication**
+
+Here is a `requests` example that executes a login into the Python 
+Package Index using basic authentication:
+
+```python
+>>> # A login into the PyPI using basic authentication
+...
+>>> import os
+>>> user = os.getenv('PYPI_USERNAME')
+>>> password = os.getenv('PYPI_PASSWORD')
+>>> import requests
+>>> session = requests.Session()
+>>> session.auth = (user, password)
+>>> auth = session.post('https://pypi.python.org/pypi?:action=login')
+>>> auth
+<Response [200]>
+>>> resp = session.get('https://pypi.python.org/pypi?:action=login')
+>>> resp
+<Response [200]>
+>>> from pprint import pprint
+>>> pprint(resp.text)
+('<?xml version="1.0" encoding="utf-8"?>\n'
+ '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" '
+ '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n'
+ '\n'
+ '  <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">\n'
+ '    <head>\n'
+ '      \n'
+ '      <meta content="text/html; charset=utf-8" http-equiv="content-type"/>\n'
+ '      <title>PyPI - the Python Package Index : Python Package Index</title>\n'
+ '      <meta content="python programming language object oriented web free '
+ 'source package index download software"/>\n'
+ '      <meta content="The Python Package Index is a repository of software '
+ 'for the Python programming language."/>\n'
+ '       <link rel="alternate" type="application/rss+xml" title="RSS: 40 '
+ 'latest updates" href="https://pypi.python.org/pypi?:action=rss"/>\n'
+ '       <link rel="alternate" type="application/rss+xml" title="RSS: 40 '
+ 'newest packages" href="https://pypi.python.org/pypi?:action=packages_rss"/>\n'
+ '       <link rel="stylesheet" media="screen" '
+ 'href="/static/styles/screen-switcher-default.css" type="text/css"/>\n'
+ '       <link media="screen" href="/static/styles/netscape4.css" '
+ 'type="text/css" rel="stylesheet"/>\n'
+ '       <link media="print" href="/static/styles/print.css" type="text/css" '
+ 'rel="stylesheet"/>\n'
+ '       <link media="screen" href="/static/styles/largestyles.css" '
+ 'type="text/css" rel="alternate stylesheet" title="large text"/>\n'
+ '       <link media="screen" href="/static/styles/defaultfonts.css" '
+ 'type="text/css" rel="alternate stylesheet" title="default fonts"/>\n'
+ '       <link rel="stylesheet" media="screen" href="/static/css/docutils.css" '
+ 'type="text/css"/>\n'
+...
+'            </li><li class=""><a href="http://www.python.org/community" '
+ 'class="" title="">Community</a>\n'
+ '            </li><li class=""><a href="http://www.python.org/psf" class="" '
+ 'title="Python Software Foundation">Foundation</a>\n'
+ '            </li><li class=""><a href="http://www.python.org/dev" class="" '
+ 'title="Python Core Language Development">Core Development</a>\n'
+ '          </li>\n'
+ '          </ul>\n'
+ '        </div>\n'
+ '\n'
+ '      </div>\n'
+ '      <div id="content-body">\n'
+ '        <div id="body-main">\n'
+ '          <div id="content">\n'
+ '\n'
+ '            <div id="breadcrumb">\n'
+ '              <a href="/pypi">Package Index</a>\n'
+ '              \n'
+ '              \n'
+ '\n'
+ '            </div>\n'
+ '\n'
+ '            <div id="document-floating">\n'
+ '\n'
+ '            <div id="document-navigation" style="overflow-y: auto; '
+ 'max-height: 15em; overflow-x: hidden;">\n'
+ '\t\t\n'
+ '\n'
+ '\t\t\n'
+ '\n'
+ '                  <h4>Welcome joseamaita</h4>\n'
+ '                  <li>\n'
+ '                    <a href="/pypi?%3Aaction=user_form">Your details</a>\n'
+ '                    (<a href="/pypi?%3Aaction=logout">Logout</a>)\n'
+ '                  </li>\n'
+ '\n'
+ '                  \n'
+ '                    \n'
+ '                  \n'
+ '\n'
+ '\t\t\n'
+ '\n'
+ '                <div id="statusdiv">\n'
+ '                </div>\n'
+ '            </div>\n'
+ '        </div>\n'
+ '        \n'
+ '\n'
+ '\n'
+ '            <div class="section">\n'
+ '              <h1>PyPI - the Python Package Index</h1>\n'
+ '\n'
+ '              \n'
+ '<p>The Python Package Index is a repository of software for the Python\n'
+ 'programming language. There are currently\n'
+ '<strong>129305</strong>\n'
+ 'packages here.\n'
+ '<br/>\n'
+...
+```
