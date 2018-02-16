@@ -379,3 +379,30 @@ Package Index using basic authentication:
  '<br/>\n'
 ...
 ```
+
+**Persisting some cookies across requests**
+
+The `Session` object allows you to persist certain parameters across 
+requests. It also persists cookies across all requests made from 
+the `Session` instance, and will use `urllib3`'s connection pooling. So, 
+if you're making several requests to the same host, the underlying TCP 
+connection will be reused, which can result in a significant performance 
+increase (HTTP persistent connection).
+
+```python
+>>> # A persistent cookie across requests
+...
+>>> import requests
+>>> session = requests.Session()
+>>> resp1 = session.get('http://httpbin.org/cookies/set/sessioncookie/123456789')
+>>> resp1
+<Response [200]>
+>>> resp2 = session.get('http://httpbin.org/cookies')
+>>> resp2
+<Response [200]>
+>>> from pprint import pprint
+>>> pprint(resp2.text)
+'{\n  "cookies": {\n    "sessioncookie": "123456789"\n  }\n}\n'
+>>> pprint(resp2.json())
+{'cookies': {'sessioncookie': '123456789'}}
+```
