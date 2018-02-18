@@ -406,3 +406,44 @@ increase (HTTP persistent connection).
 >>> pprint(resp2.json())
 {'cookies': {'sessioncookie': '123456789'}}
 ```
+
+**Providing default data to the request methods**
+
+Sessions can also be used to provide default data to the request 
+methods. This is done by providing data to the properties on a `Session` 
+object:
+
+```python
+>>> # Provide default data to headers
+>>> import requests
+>>> session = requests.Session()
+>>> session.headers.update({'x-test': 'true'})
+>>> session.headers
+{'User-Agent': 'python-requests/2.18.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'x-test': 'true'}
+>>> # both 'x-test' and 'x-test2' are sent
+...
+>>> resp = session.get('http://httpbin.org/headers', headers={'x-test2': 'true'})
+>>> resp
+<Response [200]>
+>>> from pprint import pprint
+>>> pprint(resp.text)
+('{\n'
+ '  "headers": {\n'
+ '    "Accept": "*/*", \n'
+ '    "Accept-Encoding": "gzip, deflate", \n'
+ '    "Connection": "close", \n'
+ '    "Host": "httpbin.org", \n'
+ '    "User-Agent": "python-requests/2.18.4", \n'
+ '    "X-Test": "true", \n'
+ '    "X-Test2": "true"\n'
+ '  }\n'
+ '}\n')
+>>> pprint(resp.json())
+{'headers': {'Accept': '*/*',
+             'Accept-Encoding': 'gzip, deflate',
+             'Connection': 'close',
+             'Host': 'httpbin.org',
+             'User-Agent': 'python-requests/2.18.4',
+             'X-Test': 'true',
+             'X-Test2': 'true'}}
+```
