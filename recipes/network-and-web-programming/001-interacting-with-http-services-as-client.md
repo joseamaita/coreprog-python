@@ -447,3 +447,89 @@ object:
              'X-Test': 'true',
              'X-Test2': 'true'}}
 ```
+
+**Uploading a file using requests library**
+
+Here is an example of using `requests` to upload content (JSON file):
+
+```python
+>>> # Upload a JSON file
+...
+>>> import requests
+>>> url = 'http://httpbin.org/post'
+>>> files = {'file': ('colors1.json', open('colors1.json', 'rb'))}
+>>> resp = requests.post(url, files=files)
+>>> resp
+<Response [200]>
+>>> from pprint import pprint
+>>> pprint(resp.text)
+('{\n'
+ '  "args": {}, \n'
+ '  "data": "", \n'
+ '  "files": {\n'
+ '    "file": "{\\n  \\"aliceblue\\": \\"#f0f8ff\\",\\n  \\"antiquewhite\\": '
+ '\\"#faebd7\\",\\n  \\"aqua\\": \\"#00ffff\\",\\n  \\"aquamarine\\": '
+ '\\"#7fffd4\\",\\n  \\"azure\\": \\"#f0ffff\\",\\n  \\"beige\\": '
+ '\\"#f5f5dc\\",\\n  \\"bisque\\": \\"#ffe4c4\\",\\n  \\"black\\": '
+ '\\"#000000\\",\\n  \\"blanchedalmond\\": \\"#ffebcd\\",\\n  \\"blue\\": '
+ '\\"#0000ff\\",\\n  \\"blueviolet\\": \\"#8a2be2\\",\\n  \\"brown\\": '
+ '\\"#a52a2a\\",\\n  \\"burlywood\\": \\"#deb887\\",\\n  \\"cadetblue\\": '
+ '\\"#5f9ea0\\",\\n  \\"chartreuse\\": \\"#7fff00\\",\\n  \\"chocolate\\": '
+ '\\"#d2691e\\",\\n  \\"coral\\": \\"#ff7f50\\",\\n  \\"cornflowerblue\\": '
+ '\\"#6495ed\\",\\n  \\"cornsilk\\": \\"#fff8dc\\",\\n  \\"crimson\\": '
+ '\\"#dc143c\\",\\n  \\"cyan\\": \\"#00ffff\\"\\n}\\n"\n'
+ '  }, \n'
+ '  "form": {}, \n'
+ '  "headers": {\n'
+ '    "Accept": "*/*", \n'
+ '    "Accept-Encoding": "gzip, deflate", \n'
+ '    "Connection": "close", \n'
+ '    "Content-Length": "672", \n'
+ '    "Content-Type": "multipart/form-data; '
+ 'boundary=a5de657581a6446b8f853bfec79eb921", \n'
+ '    "Host": "httpbin.org", \n'
+ '    "User-Agent": "python-requests/2.18.4"\n'
+ '  }, \n'
+ '  "json": null, \n'
+ '  "origin": "190.198.181.54", \n'
+ '  "url": "http://httpbin.org/post"\n'
+ '}\n')
+>>> pprint(resp.json())
+{'args': {},
+ 'data': '',
+ 'files': {'file': '{\n'
+                   '  "aliceblue": "#f0f8ff",\n'
+                   '  "antiquewhite": "#faebd7",\n'
+                   '  "aqua": "#00ffff",\n'
+                   '  "aquamarine": "#7fffd4",\n'
+                   '  "azure": "#f0ffff",\n'
+                   '  "beige": "#f5f5dc",\n'
+                   '  "bisque": "#ffe4c4",\n'
+                   '  "black": "#000000",\n'
+                   '  "blanchedalmond": "#ffebcd",\n'
+                   '  "blue": "#0000ff",\n'
+                   '  "blueviolet": "#8a2be2",\n'
+                   '  "brown": "#a52a2a",\n'
+                   '  "burlywood": "#deb887",\n'
+                   '  "cadetblue": "#5f9ea0",\n'
+                   '  "chartreuse": "#7fff00",\n'
+                   '  "chocolate": "#d2691e",\n'
+                   '  "coral": "#ff7f50",\n'
+                   '  "cornflowerblue": "#6495ed",\n'
+                   '  "cornsilk": "#fff8dc",\n'
+                   '  "crimson": "#dc143c",\n'
+                   '  "cyan": "#00ffff"\n'
+                   '}\n'},
+ 'form': {},
+ 'headers': {'Accept': '*/*',
+             'Accept-Encoding': 'gzip, deflate',
+             'Connection': 'close',
+             'Content-Length': '672',
+             'Content-Type': 'multipart/form-data; '
+                             'boundary=a5de657581a6446b8f853bfec79eb921',
+             'Host': 'httpbin.org',
+             'User-Agent': 'python-requests/2.18.4'},
+ 'json': None,
+ 'origin': '190.198.181.54',
+ 'url': 'http://httpbin.org/post'}
+```
