@@ -533,3 +533,56 @@ Here is an example of using `requests` to upload content (JSON file):
  'origin': '190.198.181.54',
  'url': 'http://httpbin.org/post'}
 ```
+
+### Discussion
+
+For really simple HTTP client code, using the built-in `urllib` module 
+is usually fine. However, if you have to do anything other than 
+simple `GET` or `POST` requests, you really can't rely on its 
+functionality. This is where a third-party module, such as `requests`, 
+comes in handy.
+
+**Executing a HEAD request with the http.client module**
+
+For example, if you decided to stick entirely with the standard library 
+instead of a library like `requests`, you might have to implement your 
+code using the low-level `http.client` module instead. For example, this 
+code shows how to execute a `HEAD` request:
+
+```python
+>>> # A HEAD request with the http.client module
+...
+>>> from http.client import HTTPSConnection
+>>> from urllib import parse
+>>> c = HTTPSConnection('www.python.org', 443)
+>>> c
+<http.client.HTTPSConnection object at 0x7ffa82b55eb8>
+>>> c.request('HEAD', '/')
+>>> resp = c.getresponse()
+>>> resp
+<http.client.HTTPResponse object at 0x7ffa82b45160>
+>>> print('Status', resp.status)
+Status 200
+>>> for name, value in resp.getheaders():
+...     print(name, value)
+...
+Server nginx
+Content-Type text/html; charset=utf-8
+X-Frame-Options SAMEORIGIN
+x-xss-protection 1; mode=block
+X-Clacks-Overhead GNU Terry Pratchett
+Via 1.1 varnish
+Fastly-Debug-Digest a63ab819df3b185a89db37a59e39f0dd85cf8ee71f54bbb42fae41670ae56fd2
+Content-Length 48892
+Accept-Ranges bytes
+Date Sun, 18 Feb 2018 02:07:45 GMT
+Via 1.1 varnish
+Age 2983
+Connection keep-alive
+X-Served-By cache-iad2147-IAD, cache-mia17627-MIA
+X-Cache HIT, HIT
+X-Cache-Hits 1, 14
+X-Timer S1518919665.184976,VS0,VE0
+Vary Cookie
+Strict-Transport-Security max-age=63072000; includeSubDomains
+```
