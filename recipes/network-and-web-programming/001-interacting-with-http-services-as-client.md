@@ -586,3 +586,45 @@ X-Timer S1518919665.184976,VS0,VE0
 Vary Cookie
 Strict-Transport-Security max-age=63072000; includeSubDomains
 ```
+
+**Authenticating to the PyPI using urlib**
+
+Similarly, if you have to write code involving proxies, authentication, 
+cookies, and other details, using `urllib` is awkward and verbose. For 
+example, here is a sample of code that authenticates to the Python 
+Package Index:
+
+```python
+>>> # Authentication into the PyPI using urllib
+...
+>>> import os
+>>> user = os.getenv('PYPI_USERNAME')
+>>> password = os.getenv('PYPI_PASSWORD')
+>>> import urllib.request
+>>> # Create an authorization handler
+...
+>>> p = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+>>> p
+<urllib.request.HTTPPasswordMgrWithDefaultRealm object at 0x7f94fbe9d048>
+>>> p.add_password(None, 'https://pypi.python.org', user, password)
+>>> auth = urllib.request.HTTPBasicAuthHandler(p)
+>>> auth
+<urllib.request.HTTPBasicAuthHandler object at 0x7f94fc5d4c18>
+>>> opener = urllib.request.build_opener(auth)
+>>> opener
+<urllib.request.OpenerDirector object at 0x7f94fc5d4ba8>
+>>> r = urllib.request.Request('https://pypi.python.org/pypi?:action=login')
+>>> r
+<urllib.request.Request object at 0x7f94fc5d4d68>
+>>> urllib.request.install_opener(opener)
+>>> u = opener.open(r)
+>>> u
+<http.client.HTTPResponse object at 0x7f94f965e358>
+>>> resp = u.read()
+>>> # From here. You can access more pages using opener
+...
+>>> print(resp)
+...
+```
+
+Frankly, all of this is much easier in `requests`.
