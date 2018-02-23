@@ -628,3 +628,37 @@ Package Index:
 ```
 
 Frankly, all of this is much easier in `requests`.
+
+**Using the httpbin service to test HTTP client code**
+
+Testing HTTP client code during development can often be frustrating 
+because of all the tricky details you need to worry about (e.g., 
+cookies, authentication, headers, encodings, etc.). To do this, consider 
+using the [httpbin service](http://httpbin.org). This site receives 
+requests and then echoes information back to you in the form a JSON 
+response. Here is an interactive example:
+
+```python
+>>> # Using the httpbin service
+...
+>>> import requests
+>>> r = requests.get('http://httpbin.org/get?name=Jose&n=36',
+...     headers = {'User-agent': 'goaway/1.0'})
+>>> r
+<Response [200]>
+>>> resp = r.json()
+>>> resp['headers']
+{'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate', 'Connection': 'close', 'Host': 'httpbin.org', 'User-Agent': 'goaway/1.0'}
+>>> resp['args']
+{'n': '36', 'name': 'Jose'}
+```
+
+Working with a site such as [httpbin.org](http://httpbin.org) is often 
+preferable to experimenting with a real site, especially if there's a 
+risk it might shut down your account after three failed login attempts 
+(i.e., don't try to learn how to write an HTTP authentication client by 
+logging into your bank).
+
+Although it's not discussed here, `requests` provides support for many 
+more advanced HTTP-client protocols, such as OAuth. Check its 
+documentation for more information.
