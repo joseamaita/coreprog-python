@@ -204,3 +204,82 @@ Got connection from ('127.0.0.1', 56649)
 
 Leaving.
 ```
+
+**Creating a pre-allocated pool of worker threads or processes**
+
+One issue with forking and threaded servers is that they spawn a new 
+process or thread on each client connection. There is no upper bound on 
+the number of allowed clients, so a malicious hacker could potentially 
+launch a large number of simultaneous connections in an effort to make 
+your server explode.
+
+If this is a concern, you can create a pre-allocated pool of worker 
+threads or processes. To do this, you create an instance of a normal 
+nonthreaded server, but then launch the `serve_forever()` method in a 
+pool of multiple threads. For example:
+
+```python
+#!/usr/bin/env python3
+
+from socketserver import StreamRequestHandler, TCPServer
+
+class EchoHandler(StreamRequestHandler):
+
+    def handle(self):
+        print(f'Got connection from {self.client_address}')
+        # self.rfile is a file-like object for reading
+        for line in self.rfile:
+            # self.wfile is a file-like object for writing
+            self.wfile.write(line)
+
+def main():
+    try:
+        from threading import Thread
+        NWORKERS = 16
+        serv = TCPServer(('', 20000), EchoHandler)
+        for n in range(NWORKERS):
+            t = Thread(target=serv.serve_forever)
+            t.daemon = True
+            t.start()
+        print('Multithreaded server running on port 20000')
+        serv.serve_forever()
+
+    except KeyboardInterrupt:
+        print("\n\nLeaving.")
+        raise SystemExit(1)
+
+if __name__ == '__main__':
+    main()
+```
+
+To test the server, run it and then open a separate Python process that 
+connects to it (client code):
+
+```python
+>>> from socket import socket, AF_INET, SOCK_STREAM
+>>> s = socket(AF_INET, SOCK_STREAM)
+>>> s.connect(('localhost', 20000))
+>>> s.send(b'Hello\n')
+6
+>>> resp = s.recv(8192)
+>>> print(f'Response: {resp}')
+Response: b'Hello\n'
+>>> s.close()
+>>> s = socket(AF_INET, SOCK_STREAM)
+>>> s.connect(('localhost', 20000))
+>>> s.close()
+>>> s = socket(AF_INET, SOCK_STREAM)
+>>> s.connect(('localhost', 20000))
+```
+
+The server script output is:
+
+```
+Multithreaded server running on port 20000
+Got connection from ('127.0.0.1', 56661)
+Got connection from ('127.0.0.1', 56665)
+Got connection from ('127.0.0.1', 56667)
+^C
+
+Leaving.
+```
