@@ -419,3 +419,77 @@ Got connection from ('127.0.0.1', 56901)
 
 Leaving.
 ```
+
+**Enabling features when using StreamRequestHandler**
+
+In the solution, two different handler base classes were shown 
+( `BaseRequestHandler` and `StreamRequestHandler` ). 
+The `StreamRequestHandler` class is actually a bit more flexible, and 
+supports some features that can be enabled through the specification of
+additional class variables. For example:
+
+```python
+#!/usr/bin/env python3
+
+from socketserver import StreamRequestHandler, TCPServer
+import socket
+
+class EchoHandler(StreamRequestHandler):
+    # Optional settings (defaults shown)
+    timeout = 60    # Timeout on all socket operations
+    rbufsize = -1    # Read buffer size
+    wbufsize = 0    # Write buffer size
+    disable_nagle_algorithm = False    # Sets TCP_NODELAY socket option
+
+    def handle(self):
+        print(f'Got connection from {self.client_address}')
+        # self.rfile is a file-like object for reading
+        try:
+            for line in self.rfile:
+                # self.wfile is a file-like object for writing
+                self.wfile.write(line)
+        except socket.timeout:
+            print('Timed out!')
+
+def main():
+    try:
+        serv = TCPServer(('', 20000), EchoHandler)
+        print('Echo server running on port 20000')
+        serv.serve_forever()
+
+    except KeyboardInterrupt:
+        print("\n\nLeaving.")
+        raise SystemExit(1)
+
+if __name__ == '__main__':
+    main()
+```
+
+To test the server, run it and then open a separate Python process that 
+connects to it (client code):
+
+```python
+>>> from socket import socket, AF_INET, SOCK_STREAM
+>>> s = socket(AF_INET, SOCK_STREAM)
+>>> s.connect(('localhost', 20000))
+>>> s.send(b'Hello\n')
+6
+>>> resp = s.recv(8192)
+>>> print(f'Response: {resp}')
+Response: b'Hello\n'
+>>> s.close()
+>>> s = socket(AF_INET, SOCK_STREAM)
+>>> s.connect(('localhost', 20000))
+```
+
+The server script output is:
+
+```
+Echo server running on port 20000
+Got connection from ('127.0.0.1', 57164)
+Got connection from ('127.0.0.1', 57166)
+Timed out!
+^C
+
+Leaving.
+```
