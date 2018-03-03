@@ -493,3 +493,75 @@ Timed out!
 
 Leaving.
 ```
+
+**Creating an echo server using sockets directly**
+
+Finally, it should be noted that most of Python's higher-level 
+networking modules (e.g., HTTP, XML-RPC, etc.) are built on top of 
+the `socketserver` functionality. That said, it is also not difficult to 
+implement servers directly using the `socket` library as well. Here is a 
+simple example of directly programming a server with sockets:
+
+```python
+#!/usr/bin/env python3
+# Echo server using sockets directly
+
+from socket import socket, AF_INET, SOCK_STREAM
+
+def echo_handler(address, client_sock):
+    print(f'Got connection from {address}')
+    while True:
+        msg = client_sock.recv(8192)
+        if not msg:
+            break
+        client_sock.sendall(msg)
+    client_sock.close()
+
+def echo_server(address, backlog=5):
+    sock = socket(AF_INET, SOCK_STREAM)
+    sock.bind(address)
+    sock.listen(backlog)
+    while True:
+        client_sock, client_addr = sock.accept()
+        echo_handler(client_addr, client_sock)
+
+def main():
+    try:
+        print('Echo server running on port 20000')
+        echo_server(('', 20000))
+
+    except KeyboardInterrupt:
+        print("\n\nLeaving.")
+        raise SystemExit(1)
+
+if __name__ == '__main__':
+    main()
+```
+
+To test the server, run it and then open a separate Python process that 
+connects to it (client code):
+
+```python
+>>> from socket import socket, AF_INET, SOCK_STREAM
+>>> s = socket(AF_INET, SOCK_STREAM)
+>>> s.connect(('localhost', 20000))
+>>> s.send(b'Hello\n')
+6
+>>> resp = s.recv(8192)
+>>> print(f'Response: {resp}')
+Response: b'Hello\n'
+>>> s.close()
+>>> s = socket(AF_INET, SOCK_STREAM)
+>>> s.connect(('localhost', 20000))
+```
+
+The server script output is:
+
+```
+Echo server running on port 20000
+Got connection from ('127.0.0.1', 57186)
+Got connection from ('127.0.0.1', 57187)
+^C
+
+Leaving.
+```
